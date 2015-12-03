@@ -43,6 +43,8 @@
           x = param_array[i].split('=');
           params[x[0]] = x[1];
       }
+	  var d3trans = null;
+	  var d3scale = null;
       console.log(params);
       $.ajax({
 	  	  url: "graphTest",
@@ -57,7 +59,18 @@
 	        
 	        var svg = d3.select('#mynetwork').append('svg')
     		.attr('width', width)
-    		.attr('height', height);
+    		.attr('height', height)
+    		.call(d3.behavior.zoom().on("zoom", redraw));
+    		
+    		var vis = svg.append('svg:g');
+    		
+    		function redraw() {
+			  vis.attr("transform",
+			      "translate(" + d3.event.translate + ")"
+			      + " scale(" + d3.event.scale + ")");
+			  d3trans = d3.event.translate;
+			  d3scale = d3.event.scale;
+			}
     		
     		function mouseover(d) {
 			    d3.select(this).append("text")
@@ -79,35 +92,36 @@
 			    .links(data.links)
 			    .start();
 			    
-			    var link = svg.selectAll('.link')
+			    var link = vis.selectAll('.link')
 			    .data(data.links)
 			    .enter().append('line')
 			    .attr('class', 'link');
 			
-				var gnode = svg.selectAll('g.gnode')
+				var gnode = vis.selectAll('g.gnode')
 			    .data(data.nodes)
 			    .enter()
 			    .append('g')
-	            .classed('gnode', true);
+	            .classed('gnode', true)
+	            .on("mouseover", mouseover)
+      			.on("mouseout", mouseout);
 			    
 			    var node = gnode.append("circle")
 				.attr("class", "node")
 				.attr("r", 5)
 				.style("fill", function(d) { return color(d.group); })
-				.call(force.drag)
-				.on("mouseover", mouseover)
-      			.on("mouseout", mouseout);
+				.call(force.drag);
 			    
 			    force.on('tick', function() {
-	
-				    /*node.attr('r', 5)
-				        .attr('cx', function(d) { return d.x; })
-				        .attr('cy', function(d) { return d.y; });*/
+			    
+			    	if(d3trans != null){
+					  	vis.attr("transform",
+					      "translate(" + d3trans + ")"
+					      + " scale(" + d3scale + ")");
+				    }
+			    
 				    gnode.attr("transform", function(d) { 
 					    return 'translate(' + [d.x, d.y] + ')'; 
-					})				
-					.on("mouseover", mouseover)
-      				.on("mouseout", mouseout);
+					});			
 	
 				    link.attr('x1', function(d) { return d.source.x; })
 				        .attr('y1', function(d) { return d.source.y; })
@@ -118,66 +132,7 @@
 				});
 		   }; 
 		   drawGraph();
-		   
-	        /*var options = {
-	          stabilize:false,
-	          edges: {
-	            color: {
-	              color: "gray",
-	              highlight: "gray",
-	            },
-	          },
-	          nodes: {
-	            shape: 'dot',
-	            radiusMin: 10,
-	            radiusMax: 30,
-	          },
-	          groups: {
-	            user: {
-	              color:"#F2545A",
-	              shape:"star",
-	            },
-	            feature: {
-	              shape:"triangle",
-	              color:"#EC8F93",
-	            },
-	            service: {
-	              color:"#EF777C",
-	              shape:"dot",
-	            }
-	          },
-	          tooltip: {
-	            delay: 300,
-	            fontColor: "black",
-	            fontSize: 14, // px
-	            fontFace: "verdana",
-	            color: {
-	              border: "#666",
-	              background: "#FFFFC6"
-	            }
-	          }
-	        };
-
-	        var network = new vis.Network(container, data, options);
-	        network.focusOnNode(19);
-	        network.on('select', function(properties) {
-	          var select_node = $.grep(data.nodes, function(e){
-	            return e["id"] == properties.nodes[0];
-	          })[0];
-	          if(select_node["group"] == "service"){
-	            var select_edges = $.grep(data.edges, function(e) { 
-	              return e["from"] == select_node["id"] });
-	            var textVal = "";
-	            textVal += "<h3>"+select_node["label"]+"</h3>";
-	            textVal += "<div><h4>Keywords:</h4><h4>"
-	            for (var i = select_edges.length - 1; i >= 0; i--) {
-	              textVal += "<span class=\"label label-primary\">"+select_edges[i]["to"]+"</span>\n";
-	            };
-	            textVal += "</h4></div>";
-	            textVal += "<div><img src=\""+select_node["image"]+"\" class=\"img-responsive\"></div>";
-	            $("#testText").html(textVal);
-	          }
-	        });*/
+		  
 	  	});
     }
   </script>
