@@ -22,15 +22,23 @@ public class PaperService {
         int target = 0;
         while (result.hasNext()) {
             Map<String, Object> row = result.next();
-            nodes.add(map("name",row.get("paper"),"label","paper"));
-            i++;
-            target = i;
+            nodes.add(map6("id", i, "title",row.get("paper"),"label", "paper", "cluster", "1", "value", 2, "group", "paper"));
+            target = i++;
             for (Object name : (Collection) row.get("cast")) {
-                Map<String, Object> author = map("name", name,"label","author");
-                int source = nodes.indexOf(author);
-                if (source == -1) {
+                Map<String, Object> author = map5("title", 
+                		name,"label", "author", "cluster", "2", "value", 1, "group", "author");
+                int source = 0;
+                for (int j = 0; j < nodes.size(); j++) {
+                	if (nodes.get(j).get("title").equals(name)) {
+                		source = (int) nodes.get(j).get("id");
+                		break;
+                	} 
+                }
+                if (source == 0) {
+                	author.put("id", i);
+                    source = i;
+                    i++;
                     nodes.add(author);
-                    source = i++;
                 }
                 rels.add(map("source",source,"target",target));
             }
@@ -152,6 +160,11 @@ public class PaperService {
     public Map<String, Object> graphAlc(int limit) {
         Iterator<Map<String, Object>> result = paperRepository.graph(limit).iterator();
         return toAlcFormat(result);
+    }
+    
+    public Map<String, Object> graphD3(int limit) {
+        Iterator<Map<String, Object>> result = paperRepository.graph(limit).iterator();
+        return toD3Format(result);
     }
     
     public Map<String, Object> getCoAuthor(String name) {

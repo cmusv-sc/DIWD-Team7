@@ -46,10 +46,12 @@ public class KnowledgeGraph extends WebMvcConfigurerAdapter {
     	System.out.println(input);
     	Map<String, Object> map = null;
     	if (input == null || input.length() == 0) {
-    		map = paperService.graphAlc(200);
+    		//map = paperService.graphAlc(200);
+    		map = paperService.graphD3(200);
     	} else {
     		Integer limit = Integer.parseInt(input);
-    		map = paperService.graphAlc(limit);
+    		//map = paperService.graphAlc(limit);
+    		map = paperService.graphD3(limit);
     	}
     	
     	String json = "";
