@@ -26,6 +26,9 @@ public interface PaperRepository extends GraphRepository<Paper> {
     
     @Query("MATCH (p:Paper) where p.year > {from} and p.year < {to} return p.title as paper;")
     List<Map<String, Object>> findPaperYear(@Param("from") int from, @Param("to") int to);
+    
+    @Query("MATCH (a:Author)-[:CO*]->(b:Author) where a.name = {name} return a.name as input, collect(b.name) as cast LIMIT 50")
+    List<Map<String, Object>> findCoAuthor(@Param("name") String name);
 }
 
 
