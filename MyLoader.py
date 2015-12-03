@@ -2,14 +2,14 @@ __author__ = 'Bailiang_Baby'
 from py2neo import authenticate, Graph
 from py2neo import Node, Relationship
 # set up authentication parameters
-authenticate("localhost:7474", "neo4j", "zxcvbnm52174")
+authenticate("localhost:7474", "neo4j", "neo")
 
 # connect to authenticated graph database
 graph = Graph("http://localhost:7474/db/data/")
 
 
 counter = 1
-for line in open('/Users/CMH/Desktop/outputPub.csv'):
+for line in open('outputPub.csv'):
     elements = line.split("%")
     name = elements[1]
     mdate = elements[2]
