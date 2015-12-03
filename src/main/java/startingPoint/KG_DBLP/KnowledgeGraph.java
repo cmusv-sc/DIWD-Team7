@@ -65,6 +65,29 @@ public class KnowledgeGraph extends WebMvcConfigurerAdapter {
     	return json;
     }
     
+    @RequestMapping("/getcategorize")
+    public String categorize(@RequestParam(value = "from",required = false) String from, @RequestParam(value = "to",required = false) String to) {
+    	System.out.println(from);
+    	System.out.println(to);
+    	Map<String, Object> map = null;
+    	if (from == null || from.length() == 0) {
+    		from = "1900";
+    	} 
+    	if (from == null || from.length() == 0)  {
+    		to = "2100";
+    	}
+    	map = paperService.categorize(Integer.parseInt(from),Integer.parseInt(to));
+    	String json = "";
+    	ObjectMapper mapper = new ObjectMapper();
+    	try {
+    		//convert map to JSON string
+    		json = mapper.writeValueAsString(map);
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
+    	return json;
+    }
+    
     @RequestMapping("/coAuthor")
     public String getcoAuthor(@RequestParam(value = "name", required = false) String name) {
     	System.out.println("paper sevice name : " + name);

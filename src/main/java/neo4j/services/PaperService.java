@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.regex.Pattern;
 
 @Service
 @Transactional
@@ -42,6 +43,45 @@ public class PaperService {
                 }
                 rels.add(map("source",source,"target",target));
             }
+        }
+        return map("nodes", nodes, "links", rels);
+    }
+    
+    @SuppressWarnings("rawtypes")
+	private Map<String, Object> toD3FormatCategorize(Iterator<Map<String, Object>> result) {
+        List<Map<String,Object>> nodes = new ArrayList<Map<String,Object>>();
+        List<Map<String,Object>> rels = new ArrayList<Map<String,Object>>();
+        int i = 0;
+        int target = 0;
+        String[] category = {
+        		"network",
+        		"database",
+        		"algorithm",
+        		"graph",
+        		"distributed",
+        		"language",
+        		"others",};
+        for (int c = 0; c < category.length; c++){
+        	nodes.add(map6("id", i, "title",category[c],"label", "category", "cluster", "1", "value", 2, "group", "category"));
+            i++;
+        }
+        while (result.hasNext()) {
+            Map<String, Object> row = result.next();
+            nodes.add(map6("id", i, "title",row.get("paper"),"label", "paper", "cluster", "2", "value", 2, "group", "paper"));
+            target = i++;
+            int source = -1;
+            for (int c = 0; c < category.length-1; c++) {
+            	/*if (row.get("paper").toString().contains(category[c])) {
+            		source = c;
+            	} */
+            	if (Pattern.compile(Pattern.quote(category[c]), Pattern.CASE_INSENSITIVE).matcher(row.get("paper").toString()).find()) {
+        		source = c;
+        		}
+            }
+            if (source == -1) {
+            	source = category.length-1;
+            }
+            rels.add(map("source",source,"target",target));
         }
         return map("nodes", nodes, "links", rels);
     }
@@ -170,6 +210,11 @@ public class PaperService {
     public Map<String, Object> getCoAuthor(String name) {
         Iterator<Map<String, Object>> result = paperRepository.findCoAuthor(name).iterator();
         return toAlcFormatCoauthor(result);
+    }
+    
+    public Map<String, Object> categorize(int from, int to) {
+        Iterator<Map<String, Object>> result = paperRepository.findPaperYear(from,to).iterator();
+        return toD3FormatCategorize(result);
     }
 }
 
