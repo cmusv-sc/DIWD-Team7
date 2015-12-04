@@ -132,4 +132,21 @@ public class KnowledgeGraph extends WebMvcConfigurerAdapter {
     	return paperRepository.findByTitle(title);
     }
 
+    @RequestMapping("/authorNetwork")
+    public String getauthornetwork(@RequestParam(value = "name", required = false) String name) {
+    	System.out.println("paper sevice name : " + name);
+    	name = name.replace('+', ' ');
+    	System.out.println("Name: " + name);
+    	Map<String, Object> map = paperService.getAuthorNetwork(name == null ? "unknown" : name);
+    	System.out.println("/CoAuthor : " + name);
+    	String json = "";
+    	ObjectMapper mapper = new ObjectMapper();
+    	try {
+    		//convert map to JSON string
+    		json = mapper.writeValueAsString(map);
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
+    	return json;
+    }
 }

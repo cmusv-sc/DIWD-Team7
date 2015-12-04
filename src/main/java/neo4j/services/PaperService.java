@@ -216,5 +216,10 @@ public class PaperService {
         Iterator<Map<String, Object>> result = paperRepository.findPaperYear(from,to).iterator();
         return toD3FormatCategorize(result);
     }
+    
+    public Map<String, Object> getAuthorNetwork(String name) {
+        Iterator<Map<String, Object>> result = paperRepository.findAuthorNetwork(name).iterator();
+        return toD3Format(result);
+    }
 }
 
