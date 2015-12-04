@@ -3,16 +3,24 @@ package startingPoint.KG_DBLP;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
 
 import neo4j.domain.*;
 import neo4j.repositories.*;
@@ -35,6 +43,21 @@ public class KnowledgeGraph extends WebMvcConfigurerAdapter {
 
     @Autowired PaperRepository paperRepository;
     @Autowired DatasetRepository datasetRepository;
+    
+    /*@Override
+    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
+    	System.out.println("-----configurer----");
+        configurer.enable();
+    }
+
+    @Bean
+    public InternalResourceViewResolver viewResolver() {
+        InternalResourceViewResolver resolver = new InternalResourceViewResolver();
+        System.out.println("-----viewResolver----");
+        resolver.setPrefix("WEB-INF/jsp/");
+        resolver.setSuffix(".jsp");
+        return resolver;
+    }*/
 
     @RequestMapping("/graph")
     public Map<String, Object> graph(@RequestParam(value = "limit",required = false) Integer limit) {

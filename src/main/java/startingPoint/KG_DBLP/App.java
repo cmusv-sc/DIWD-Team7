@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Import(RepositoryRestMvcConfiguration.class)
 @EnableScheduling
 @EnableAutoConfiguration
-@ComponentScan(basePackages = {"neo4j.services"})
+@ComponentScan(basePackages = {"neo4j.services", "neo4j.security", "neo4j.controller"})
 @Configuration
 @EnableNeo4jRepositories(basePackages = "neo4j.repositories")
 public class App extends Neo4jConfiguration {
