@@ -29,6 +29,10 @@ public interface PaperRepository extends GraphRepository<Paper> {
     
     @Query("MATCH (a:Author)-[:CO]->(b:Author) return a.name as author, collect(b.name) as cast LIMIT 50")
     List<Map<String, Object>> findAuthorNetwork(@Param("limit") int limit);
+    
+    @Query("match (a:Author {name: {author1}}), (b:Author {name: {author2}}), p = shortestPath((a)-[*..10]-(b)) with extract(n IN nodes(p)| n.name)"
+    		+ " as Authors unwind(Authors) as cast return cast")
+    List<Map<String, String>> smallWorldTheory(@Param("author1") String author1, @Param("author2") String author2);
 }
 
 
