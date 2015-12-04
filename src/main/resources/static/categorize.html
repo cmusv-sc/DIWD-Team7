@@ -3,26 +3,8 @@
 <head>
   <title>Query 7</title>
 
-  <style type="text/css">
-    html, body {
-      font: 10pt arial;
-    }
-    #mynetwork {
-      width: 600px;
-      height: 600px;
-      border: 1px solid lightgray;
-    }
-    .node {
-    fill: #ccc;
-    stroke: #fff;
-    stroke-width: 2px;
-	}
-	
-	.link {
-	    stroke: #777;
-	    stroke-width: 2px;
-	}
-  </style>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/graph.css"> 
 
   <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
   <script type="text/javascript" src="javascript/jquery-2.1.4.js"></script>
@@ -140,17 +122,20 @@
   <script src="javascript/googleAnalytics.js"></script>
 </head>
 <body onload="draw()">
-<p>
-  Categorize the research papers (given time period)
-</p>
-  <div id="mynetwork"></div>
-  <div id="graphText">
-    <div class="row">
-      <div class="col-lg-6" id="testGraph">
+  <div class="container">
+    <h3>
+      Categorize the research papers (given time period)
+    </h3>
+      <div id="mynetwork"></div>
+      <div id="graphText">
+        <div class="row">
+          <div class="col-lg-6" id="testGraph">
+          </div>
+          <div class="col-lg-6" id="testText">
+          </div>
+        </div>
       </div>
-      <div class="col-lg-6" id="testText">
-      </div>
-    </div>
   </div>
+
 </body>
 </html>

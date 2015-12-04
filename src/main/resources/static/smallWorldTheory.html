@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-  <title>Query Test</title>
+  <title>Query 11</title>
 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
   <link rel="stylesheet" href="css/graph.css"> 
@@ -16,7 +16,6 @@
     var network = null;
     
     var width = 600, height = 600;
-
     function draw() {
       var test = null;
 	  var params = {};
@@ -29,11 +28,10 @@
 	  var d3scale = null;
       console.log(params);
       $.ajax({
-	  	  url: "graphTest",
+	  	  url: "smallWorldTheory",
 	  	  type: "GET",
 	  	  contentType: "applcation/json",
 	  	  data: params
-	  	  //data: params["limit"]
 	  	}).done(function(data) {
 	  		console.log("hahahaha" + data);
 	        var data = JSON.parse(data);
@@ -61,7 +59,6 @@
 			            return 'translate(5, -10)';
 			        })
 			        .text(d.group + " : " + d.title);
-			    this.parentNode.appendChild(this);
 			}
 			
 			function mouseout(d) {
@@ -123,18 +120,16 @@
 </head>
 <body onload="draw()">
   <div class="container">
-    <h3>
-      Paper-Person network
-    </h3>
-      <div id="mynetwork" class="q16"></div>
-      <div id="graphText">
-        <div class="row">
-          <div class="col-lg-6" id="testGraph">
-          </div>
-          <div class="col-lg-6" id="testText">
-          </div>
+    <h3> Small World Theory </h3>
+    <div id="mynetwork"></div>
+    <div id="graphText">
+      <div class="row">
+        <div class="col-lg-6" id="testGraph">
+        </div>
+        <div class="col-lg-6" id="testText">
         </div>
       </div>
+    </div>
   </div>
 
 </body>

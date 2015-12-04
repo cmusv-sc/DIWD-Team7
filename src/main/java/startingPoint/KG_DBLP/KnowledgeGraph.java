@@ -129,6 +129,23 @@ public class KnowledgeGraph extends WebMvcConfigurerAdapter {
     	return json;
     }
     
+    @RequestMapping("/smallWorldTheory")
+    public String proveSmallWorld(@RequestParam(value = "author1", required = false) String author1,
+    				@RequestParam(value = "author2", required = false) String author2) {
+    	author1 = author1.replace('+', ' ');
+    	author2 = author2.replace('+', ' ');
+    	Map<String, Object> map = paperService.proveSmallWorld(author1, author2);
+    	String json = "";
+    	ObjectMapper mapper = new ObjectMapper();
+    	try {
+    		//convert map to JSON string
+    		json = mapper.writeValueAsString(map);
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
+    	return json;
+    }
+    
     @RequestMapping("/graphUserDataset")
     public String graphUserDataset(@RequestParam(value = "limit",required = false) Integer limit) {
     	Map<String, Object> map = datasetService.graphAlc(limit == null ? 1 : limit);
@@ -155,4 +172,28 @@ public class KnowledgeGraph extends WebMvcConfigurerAdapter {
     	return paperRepository.findByTitle(title);
     }
 
+    @RequestMapping("/authorNetwork")
+    public String getauthornetwork(@RequestParam(value = "limit",required = false) String input) {
+        System.out.println(input);
+        Map<String, Object> map = null;
+        if (input == null || input.length() == 0) {
+            //map = paperService.graphAlc(200);
+            map = paperService.getAuthorNetwork(200);
+        } else {
+            Integer limit = Integer.parseInt(input);
+            //map = paperService.graphAlc(limit);
+            map = paperService.getAuthorNetwork(limit);
+        }
+        
+        String json = "";
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            //convert map to JSON string
+            json = mapper.writeValueAsString(map);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println(json);
+        return json;
+    }
 }

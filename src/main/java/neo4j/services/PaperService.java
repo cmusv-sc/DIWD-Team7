@@ -47,7 +47,54 @@ public class PaperService {
         return map("nodes", nodes, "links", rels);
     }
     
+	private Map<String, Object> toD3FormatSmallWorld(Iterator<Map<String, String>> result) {
+        List<Map<String, Object>> nodes = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> rels = new ArrayList<Map<String,Object>>();
+        int i = 0;
+        while (result.hasNext()) {
+        	Map<String, String> row = result.next();
+        	nodes.add(map6("id", i, "title",row.get("cast"),"label", "author", "cluster", "1", "value", 2, "group", "author"));
+        	if (i != 0) {
+        		rels.add(map("source", i - 1,"target", i));
+        	}
+        	i++;
+        }
+
+        return map("nodes", nodes, "links", rels);
+    }
+    
     @SuppressWarnings("rawtypes")
+    private Map<String, Object> toD3FormatAuthorNetwork(Iterator<Map<String, Object>> result) {
+        List<Map<String,Object>> nodes = new ArrayList<Map<String,Object>>();
+        List<Map<String,Object>> rels = new ArrayList<Map<String,Object>>();
+        int i = 0;
+        int target = 0;
+        while (result.hasNext()) {
+            Map<String, Object> row = result.next();
+            nodes.add(map6("id", i, "title",row.get("author"),"label", "author", "cluster", "1", "value", 2, "group", "author"));
+            target = i++;
+            for (Object name : (Collection) row.get("cast")) {
+                Map<String, Object> author = map5("title", 
+                        name,"label", "author", "cluster", "2", "value", 1, "group", "author");
+                int source = 0;
+                for (int j = 0; j < nodes.size(); j++) {
+                    if (nodes.get(j).get("title").equals(name)) {
+                        source = (int) nodes.get(j).get("id");
+                        break;
+                    } 
+                }
+                if (source == 0) {
+                    author.put("id", i);
+                    source = i;
+                    i++;
+                    nodes.add(author);
+                }
+                rels.add(map("source",source,"target",target));
+            }
+        }
+        return map("nodes", nodes, "links", rels);
+    }
+
 	private Map<String, Object> toD3FormatCategorize(Iterator<Map<String, Object>> result) {
         List<Map<String,Object>> nodes = new ArrayList<Map<String,Object>>();
         List<Map<String,Object>> rels = new ArrayList<Map<String,Object>>();
@@ -215,6 +262,17 @@ public class PaperService {
     public Map<String, Object> categorize(int from, int to) {
         Iterator<Map<String, Object>> result = paperRepository.findPaperYear(from,to).iterator();
         return toD3FormatCategorize(result);
+    }
+    
+    public Map<String, Object> getAuthorNetwork(int limit) {
+        Iterator<Map<String, Object>> result = paperRepository.findAuthorNetwork(limit).iterator();
+        return toD3FormatAuthorNetwork(result);
+    }
+    
+    public Map<String, Object> proveSmallWorld(String author1, String author2) {
+    	Iterator<Map<String, String>> result = paperRepository.smallWorldTheory(author1, author2).iterator();
+
+    	return toD3FormatSmallWorld(result);
     }
 }
 
