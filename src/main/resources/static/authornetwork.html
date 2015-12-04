@@ -35,7 +35,7 @@
 	  	}).done(function(data) {
 	  		console.log("hahahaha" + data);
 	        var data = JSON.parse(data);
-	        var color = d3.scale.category20();
+	        var color = d3.scale.linear().domain([0, 10]).range([1000,1]);
 	        
 	        var svg = d3.select('#mynetwork').append('svg')
     		.attr('width', width)
@@ -87,7 +87,7 @@
 			    
 			    var node = gnode.append("circle")
 				.attr("class", "node")
-				.attr("r", 5)
+				.attr("r", 7)
 				.style("fill", function(d) { return color(d.group); })
 				.call(force.drag);
 			    

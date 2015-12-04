@@ -4,7 +4,7 @@
   border: 1px solid lightgray;
 }
 .node {
-  fill: #ccc;
+  fill: #ff7f0e;
   stroke: #fff;
   stroke-width: 2px;
 }
@@ -13,3 +13,4 @@
   stroke: #777;
   stroke-width: 2px;
 }
+
