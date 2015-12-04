@@ -26,7 +26,6 @@
 
   <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
   <script type="text/javascript" src="javascript/jquery-2.1.4.js"></script>
-  <link href="css/vis.css" rel="stylesheet" type="text/css" />
 
   <script type="text/javascript">
     var nodes = null;
@@ -49,7 +48,7 @@
       $.ajax({
 	  	  url: "authorNetwork",
 	  	  type: "GET",
-	  	  contentType: "applcation/json",
+	  	  contentType: "application/json",
 	  	  data: params
 	  	  //data: params["limit"]
 	  	}).done(function(data) {
@@ -140,7 +139,7 @@
 </head>
 <body onload="draw()">
 <p>
-  Simple Knowledge Graph
+  Author - Author Network
 </p>
   <div id="mynetwork"></div>
   <div id="graphText">
