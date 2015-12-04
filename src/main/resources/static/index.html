@@ -10,34 +10,33 @@
 <body>
 	<div class="jumbotron">
 		<div class="container">
-			<div class="col-md-9">
+			<div class="col-md-8">
+
 				<h1> Team 7 </h1>
 				<p> Exploring computer science bibliography relationships using graph database </p>
 			</div>
-			<div class="col-md-3">
+			<div class="col-md-4">
 				<ul class="team7">
 					<li>Minghan Chen </li>
 					<li>Kun-Lin Lee </li>
 					<li>Johnny Shen </li>
 					<li>Hoa Vu</li>
 				</ul>
+				<div class="network"></div>
 			</div>
+
 		</div>
 	</div>
-	<div class="container content">	
-		<form role="form" id ="Q1" action="QueryTest2.html" method="get" class="form-inline">
-			<p> <strong> 1. Simple Graph </strong></p>
-		  <div class="form-group">
-		    <input type= "text" name="limit" id="limit" class="form-control" value= "" />
-			  <input type="submit" name="button" id="button" class="btn btn-success" value="submit"/>
-		  </div> 
-		</form>
+	<div class="container content">
+
+		<p> <strong> 1. How to store all publication information in Neo4j, including paper, author, affiliation, topics, etc </strong></p>
+		<p>Finished</p>
 		<br>
 
 		<form id="Q2" action="getCoAuthor.html" method="get" class="form-inline">
 			<p> <strong>2. Given the name of a researcher, generate a graph* showing the direct collaboration network of the author (her all co-authors). </strong></p>
 			<input type= "text" name="name" id="name" class="form-control" value= "Walter Vogler" />
-			<input type="submit" name="button" id="button" class="btn btn-success" value="submit"/>
+			<input type="submit" name="button" id="button" class="btn btn-warning" value="Submit"/>
 		</form>
 		<br>
 
@@ -45,19 +44,25 @@
 			<p><strong> 5. Given a timeline of years for a set of authors, generate a graph showing their publications per year.</strong> </p>
 			<input type= "text" name="from" id="from" value= "2000" class="form-control"/>
 			<input type= "text" name="to" id="to" value= "2010" class="form-control"/>
-			<input type="submit" name="button" id="button" value="submit" class="btn btn-success"/>
+			<input type="submit" name="button" id="button" value="Submit" class="btn btn-warning"/>
 		</form>
 		<br>
 
 		<form id = "Q15" action="authornetwork.html" method="get" class="form-inline">
 			<p> <strong>15. Generate a Person-Person network, showing their collaboration relationships. </strong></p>
 			<input type= "text" name="limit" id="limit" value= "" class="form-control" />
-			<input type="submit" name="button" id="button" class="btn btn-success"value="submit15"/>
+			<input type="submit" name="button" id="button" class="btn btn-warning"value="Submit"/>
 		</form>
 		<br>
-		<form >
-			
+
+		<form role="form" id ="Q1" action="QueryTest2.html" method="get" class="form-inline">
+			<p> <strong> 16. Generate a Paper-Person network, showing their authoring relationships. </strong></p>
+		  <div class="form-group">
+		    <input type= "text" name="limit" id="limit" class="form-control" value= "" />
+			  <input type="submit" name="button" id="button" class="btn btn-warning" value="submit"/>
+		  </div> 
 		</form>
+
 	</div>
 	
 </body>
