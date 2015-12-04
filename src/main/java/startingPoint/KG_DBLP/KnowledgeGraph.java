@@ -129,7 +129,7 @@ public class KnowledgeGraph extends WebMvcConfigurerAdapter {
     	return json;
     }
     
-    @RequestMapping("/smallWorldTheory")
+    @RequestMapping("/getsmallWorldTheory")
     public String proveSmallWorld(@RequestParam(value = "author1", required = false) String author1,
     				@RequestParam(value = "author2", required = false) String author2) {
     	author1 = author1.replace('+', ' ');
