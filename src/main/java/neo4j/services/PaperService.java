@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
 @Service
@@ -95,19 +96,74 @@ public class PaperService {
         return map("nodes", nodes, "links", rels);
     }
 
-	private Map<String, Object> toD3FormatCategorize(Iterator<Map<String, Object>> result) {
+	
+	@SuppressWarnings("unchecked")
+	private String[] getTopKeywords(Iterator<Map<String, Object>> result) {
+		String[] res = new String[21];
+        HashMap<String, Integer> map = new HashMap<String, Integer> ();
+        while (result.hasNext()) {
+            Map<String, Object> row = result.next();
+            String title = row.get("paper").toString();
+            String title2 = title.replaceAll("[,.]", "").toLowerCase();
+            String[] words = title2.split(" ");
+            for(int i = 0; i < words.length; i++){
+            	String s = words[i];
+            	if(map.containsKey(s)){
+            		int count = map.get(s);
+            		map.put(s, count+1);
+            	}
+            	else{
+            		map.put(s, 1);
+            	}
+            }
+            
+        }
+        Set<Entry<String, Integer>> entries = map.entrySet();
+        Comparator<Entry<String, Integer>> intComparator =
+        		new Comparator<Entry<String,Integer>>() 
+        		{ @Override 
+        	      public int compare(Entry<String, Integer> e1, Entry<String, Integer> e2) 
+        		{ Integer v1 = e1.getValue();
+        		Integer v2 = e2.getValue();
+        		return v2.compareTo(v1); } };
+        		List<Entry<String, Integer>> listOfEntries = new ArrayList<Entry<String, Integer>>(entries); 
+        		Collections.sort(listOfEntries, intComparator);
+        int r = 0;
+        List<String> blacklist = new ArrayList<String>();
+        blacklist.add("and");
+        blacklist.add("or");
+        blacklist.add("for");
+        blacklist.add("the");
+        blacklist.add("of");
+        blacklist.add("a");
+        blacklist.add("an");
+        blacklist.add("in");
+        blacklist.add("with");
+        blacklist.add("on");
+        blacklist.add("to");
+        blacklist.add("other");
+        blacklist.add("by");
+        blacklist.add("");
+        for (int c = 0; c < listOfEntries.size(); c++){
+        	if(r > 19)
+        		break;
+        	Entry<String, Integer> e = listOfEntries.get(c);
+        	if(!blacklist.contains(e.getKey())){
+        		res[r]=e.getKey();
+        		r++;
+            	System.out.println(e.getKey() + " => " + e.getValue());
+        	}
+        }
+        res[20] = "other";
+        return res;
+    }
+	
+	
+	private Map<String, Object> toD3FormatCategorize(Iterator<Map<String, Object>> result, String[] category) {
         List<Map<String,Object>> nodes = new ArrayList<Map<String,Object>>();
         List<Map<String,Object>> rels = new ArrayList<Map<String,Object>>();
         int i = 0;
         int target = 0;
-        String[] category = {
-        		"network",
-        		"database",
-        		"algorithm",
-        		"graph",
-        		"distributed",
-        		"language",
-        		"others",};
         for (int c = 0; c < category.length; c++){
         	nodes.add(map6("id", i, "title",category[c],"label", "category", "cluster", "1", "value", 2, "group", "category"));
             i++;
@@ -117,18 +173,29 @@ public class PaperService {
             nodes.add(map6("id", i, "title",row.get("paper"),"label", "paper", "cluster", "2", "value", 2, "group", "paper"));
             target = i++;
             int source = -1;
+        	if (row.get("paper").toString().contains("Relaxed balance")) {
+        		System.out.println("test");
+        		if (row.get("paper").toString().contains("search")) {
+        			System.out.println("test2");
+        		}
+        		if (Pattern.compile(Pattern.quote("search"), Pattern.CASE_INSENSITIVE).matcher(row.get("paper").toString()).find()){
+        			System.out.println("test3");
+        		}
+    		}
             for (int c = 0; c < category.length-1; c++) {
             	/*if (row.get("paper").toString().contains(category[c])) {
             		source = c;
             	} */
             	if (Pattern.compile(Pattern.quote(category[c]), Pattern.CASE_INSENSITIVE).matcher(row.get("paper").toString()).find()) {
-        		source = c;
+            		source = c;
+            		rels.add(map("source",source,"target",target));
         		}
             }
             if (source == -1) {
             	source = category.length-1;
+            	rels.add(map("source",source,"target",target));
             }
-            rels.add(map("source",source,"target",target));
+            
         }
         return map("nodes", nodes, "links", rels);
     }
@@ -261,7 +328,9 @@ public class PaperService {
     
     public Map<String, Object> categorize(int from, int to) {
         Iterator<Map<String, Object>> result = paperRepository.findPaperYear(from,to).iterator();
-        return toD3FormatCategorize(result);
+        String[] topkeyword = getTopKeywords(result);
+        Iterator<Map<String, Object>> result2 = paperRepository.findPaperYear(from,to).iterator();
+        return toD3FormatCategorize(result2, topkeyword);
     }
     
     public Map<String, Object> getAuthorNetwork(int limit) {
