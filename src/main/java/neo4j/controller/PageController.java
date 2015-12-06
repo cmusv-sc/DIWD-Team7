@@ -26,10 +26,13 @@ import neo4j.domain.*;
 import neo4j.repositories.*;
 import neo4j.services.DatasetService;
 import neo4j.services.PaperService;
+import neo4j.services.UserService;
 
 @Configuration
 @Controller
 public class PageController {
+	
+	@Autowired UserService userService;
 	
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String getLoginPage(@RequestParam Optional<String> error) {
@@ -45,8 +48,12 @@ public class PageController {
     
     @RequestMapping(value = "/home", method = RequestMethod.GET)
     public String home(final HttpServletRequest request, Principal principal, Model model) {
-    	System.out.println("current user is" + principal.getName());
-    	model.addAttribute("username", principal.getName());
+    	String username = principal.getName();
+    	System.out.println("current user is" + username);
+    	System.out.println("last visited" + userService.getlastpath(username));
+    	model.addAttribute("username", username);
+    	if (!userService.getlastpath(username).equals(""))
+    		model.addAttribute("lastvisit", userService.getlastpath(username));
         return "index";
     }
     

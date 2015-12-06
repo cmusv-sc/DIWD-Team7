@@ -30,7 +30,11 @@
 		</div>
 	</div>
 	<div class="container content">
-		 <p th:text="'Hello, ' + ${username} + ', you have recently visited'" />
+		 <p th:if="${lastvisit}"><span th:text="'Hello, ' + ${username} + ', you have recently visited'"/>
+		 <a th:href="@{${lastvisit}}">this query</a></p>
+		 
+		 <p th:unless="${lastvisit}"><span th:text="'Hello, ' + ${username} + ', please try to query something!'"/>
+		 </p>
 		 <br/>
 		 
 		<p> <strong> 1. How to store all publication information in Neo4j, including paper, author, affiliation, topics, etc </strong></p>
