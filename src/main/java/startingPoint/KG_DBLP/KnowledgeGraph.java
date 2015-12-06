@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
@@ -21,6 +23,8 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
+
+import javax.servlet.http.HttpServletRequest;
 
 import neo4j.domain.*;
 import neo4j.repositories.*;
@@ -44,6 +48,9 @@ public class KnowledgeGraph extends WebMvcConfigurerAdapter {
     @Autowired PaperRepository paperRepository;
     @Autowired DatasetRepository datasetRepository;
     
+    @Autowired 
+    HandlerInterceptor QueryInterceptor;
+    
     /*@Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
     	System.out.println("-----configurer----");
@@ -58,6 +65,12 @@ public class KnowledgeGraph extends WebMvcConfigurerAdapter {
         resolver.setSuffix(".jsp");
         return resolver;
     }*/
+
+    
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+      registry.addInterceptor(QueryInterceptor).excludePathPatterns("/login","/logout","/error");
+    }
 
     @RequestMapping("/graph")
     public Map<String, Object> graph(@RequestParam(value = "limit",required = false) Integer limit) {
