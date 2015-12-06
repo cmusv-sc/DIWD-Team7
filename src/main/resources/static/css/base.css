@@ -1,12 +1,21 @@
 body {
   background: #fff;
 }
-
+h1,h2,h3,h4,h5 {
+	font-weight: 500;
+}
 .login-container {
-	max-width: 450px;
+	max-width: 450px !important;
+	margin: 0 auto;
+	border: 1px solid #ccc;
+	padding: 30px;
 }
 .login-container h2 {
 	text-align: center;
+}
+.login-container .btn {
+	margin: 0 auto;
+	width:200px;
 }
 .jumbotron {
   /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#007da3+0,27b2c4+100 */
