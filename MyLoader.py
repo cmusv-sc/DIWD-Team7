@@ -12,7 +12,7 @@ counter = 1
 for line in open('outputPub.csv'):
     elements = line.split("%")
     name = elements[1]
-    mdate = elements[2]
+    # mdate = elements[2]
     key = elements[3]
     author = elements[4]
     pages = elements[5]
@@ -27,7 +27,7 @@ for line in open('outputPub.csv'):
     print "paper created", counter
     counter = counter + 1
 
-    paper.properties["mdate"] = mdate
+    # paper.properties["mdate"] = mdate
     paper.properties["key"] = key
     paper.properties["pages"] = pages
     paper.properties["year"] = int(year)
