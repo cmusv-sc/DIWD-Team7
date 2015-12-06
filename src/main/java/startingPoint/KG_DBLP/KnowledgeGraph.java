@@ -209,4 +209,29 @@ public class KnowledgeGraph extends WebMvcConfigurerAdapter {
         System.out.println(json);
         return json;
     }
+    
+    @RequestMapping("/paperCitation")
+    public String getpapercitation(@RequestParam(value = "limit",required = false) String input) {
+        System.out.println(input);
+        Map<String, Object> map = null;
+        if (input == null || input.length() == 0) {
+            //map = paperService.graphAlc(200);
+            map = paperService.getPaperCitation(100);
+        } else {
+            Integer limit = Integer.parseInt(input);
+            //map = paperService.graphAlc(limit);
+            map = paperService.getPaperCitation(limit);
+        }
+        
+        String json = "";
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            //convert map to JSON string
+            json = mapper.writeValueAsString(map);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println(json);
+        return json;
+    }
 }

@@ -343,5 +343,10 @@ public class PaperService {
 
     	return toD3FormatSmallWorld(result);
     }
+    
+    public Map<String, Object> getPaperCitation(int limit) {
+        Iterator<Map<String, Object>> result = paperRepository.findPaperCitation(limit).iterator();
+        return toD3FormatAuthorNetwork(result);
+    }
 }
 

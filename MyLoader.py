@@ -9,10 +9,10 @@ graph = Graph("http://localhost:7474/db/data/")
 
 
 counter = 1
-for line in open('outputPub.csv'):
-    elements = line.split("%")
+for line in open('dblp_proccessed1.csv'):
+    elements = line.split("|")
     name = elements[1]
-    # mdate = elements[2]
+    mdate = elements[2]
     key = elements[3]
     author = elements[4]
     pages = elements[5]
@@ -27,7 +27,7 @@ for line in open('outputPub.csv'):
     print "paper created", counter
     counter = counter + 1
 
-    # paper.properties["mdate"] = mdate
+    paper.properties["mdate"] = mdate
     paper.properties["key"] = key
     paper.properties["pages"] = pages
     paper.properties["year"] = int(year)
@@ -37,7 +37,7 @@ for line in open('outputPub.csv'):
     paper.properties["url"] = url
     paper.properties["ee"] = ee
 
-    authors = author.split("\t")
+    authors = author.split("^")
     lastAuthor = None
 
     # Current paper only has ONE author
