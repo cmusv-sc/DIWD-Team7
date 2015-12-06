@@ -32,4 +32,21 @@ public class UserService {
         }
         return null;
     }
+    
+    public void removelastpath(String username){
+    	userRepository.removelastpath(username);
+    }
+    
+    public void setlastpath(String username, String path) {
+        userRepository.setlastpath(username,path);
+    }
+    
+    public String getlastpath(String username) {
+    	Iterator<Map<String, Object>> result = userRepository.getlastpath(username).iterator();
+    	if (result.hasNext()) {
+            Map<String, Object> row = result.next();
+            	return row.get("path").toString();
+    	}
+    	return "";
+    }
 }
