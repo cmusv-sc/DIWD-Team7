@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 
 
@@ -32,11 +33,13 @@ public class SecurityConfiger extends WebSecurityConfigurerAdapter {
                 .and()
             .formLogin()
 	            .loginPage("/login")
+	            .defaultSuccessUrl("/home", true)
 	            .failureUrl("/login?error")
 	            .permitAll()
                 .and()
             .logout()
                 .logoutUrl("/logout")
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 //.logoutSuccessUrl("/")
                 .permitAll();
     }
