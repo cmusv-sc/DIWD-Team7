@@ -29,6 +29,7 @@ public class SecurityConfiger extends WebSecurityConfigurerAdapter {
     	System.out.println("----HttpSecurity-----");
         http
             .authorizeRequests()
+            	.antMatchers("/css/**").permitAll()
             	.anyRequest().authenticated()
                 .and()
             .formLogin()
