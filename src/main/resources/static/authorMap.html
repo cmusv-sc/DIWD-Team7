@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+<head>
+  <title>Query 15 - Get Person Person Network </title>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/graph.css"> 
+  <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+  <script type="text/javascript" src="javascript/jquery-2.1.4.js"></script>
+  <script src="http://maps.googleapis.com/maps/api/js"></script>
+  <script>
+    var myCenter=new google.maps.LatLng(51.508742,-0.120850);
+
+    function initialize()
+    {
+    var mapProp = {
+      center:myCenter,
+      zoom:5,
+      mapTypeId:google.maps.MapTypeId.ROADMAP
+      };
+
+    var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
+
+    var marker=new google.maps.Marker({
+      position:myCenter,
+      });
+
+    marker.setMap(map);
+    }
+
+    google.maps.event.addDomListener(window, 'load', initialize);
+</script>
+  <script src="javascript/googleAnalytics.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h3> Author Map </h3>
+    <div id="googleMap" style="width:500px;height:380px;"></div>
+
+  </div>
+
+</body>
+</html>
