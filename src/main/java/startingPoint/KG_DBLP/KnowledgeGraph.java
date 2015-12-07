@@ -124,6 +124,35 @@ public class KnowledgeGraph extends WebMvcConfigurerAdapter {
     	return json;
     }
     
+    @RequestMapping("/getcategorize2")
+    public String categorize2(@RequestParam(value = "from",required = false) String from, @RequestParam(value = "to",required = false) String to, @RequestParam(value = "journal",required = false) String journal, @RequestParam(value = "keywords",required = false) String keywords) {
+    	System.out.println(from);
+    	System.out.println(to);
+    	System.out.println(journal);
+    	System.out.println(keywords);
+    	Map<String, Object> map = null;
+    	if (from == null || from.length() == 0) {
+    		from = "1900";
+    	} 
+    	if (from == null || from.length() == 0)  {
+    		to = "2100";
+    	}
+    	journal = journal.replace('+', ' ');
+    	keywords = keywords.replace('+', ' ');
+    	String newkey=keywords.replace("%2C", "|");
+    	//newkey = "(?i)^.*(" + newkey + ").*$";
+    	map = paperService.categorize2(Integer.parseInt(from),Integer.parseInt(to),journal,newkey);
+    	String json = "";
+    	ObjectMapper mapper = new ObjectMapper();
+    	try {
+    		//convert map to JSON string
+    		json = mapper.writeValueAsString(map);
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
+    	return json;
+    }
+    
     @RequestMapping("/coAuthor")
     public String getcoAuthor(@RequestParam(value = "name", required = false) String name) {
     	System.out.println("paper sevice name : " + name);

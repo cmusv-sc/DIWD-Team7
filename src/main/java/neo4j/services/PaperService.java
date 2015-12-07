@@ -364,6 +364,14 @@ public class PaperService {
         return toD3FormatCategorize(result2, topkeyword);
     }
     
+    public Map<String, Object> categorize2(int from, int to, String journal, String keywords) {
+    	System.out.println(keywords);
+        Iterator<Map<String, Object>> result = paperRepository.findPaperYJK(from,to,journal,keywords).iterator();
+        String[] topkeyword = getTopKeywords(result);
+        Iterator<Map<String, Object>> result2 = paperRepository.findPaperYJK(from,to,journal,keywords).iterator();
+        return toD3FormatCategorize(result2, topkeyword);
+    }
+    
     public Map<String, Object> getAuthorNetwork(int limit) {
         Iterator<Map<String, Object>> result = paperRepository.findAuthorNetwork(limit).iterator();
         return toD3FormatAuthorNetwork(result);
