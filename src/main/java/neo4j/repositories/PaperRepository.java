@@ -34,7 +34,7 @@ public interface PaperRepository extends GraphRepository<Paper> {
     		+ " as Authors unwind(Authors) as cast return cast")
     List<Map<String, String>> smallWorldTheory(@Param("author1") String author1, @Param("author2") String author2);
     
-    @Query("match (pa:Paper)-[:HASCITE]->(cite:Cite) match (pb:Paper) where cite.title = pb.key return cite as cite, collect(pb) as cast LIMIT {limit}")
+    @Query("match (pa:Paper)-[:CITE]->(pb:Paper) return pa.title as input, collect(pb.title) as cast LIMIT {limit}")
     List<Map<String, Object>> findPaperCitation(@Param("limit") int limit);
 }
 

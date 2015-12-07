@@ -216,7 +216,7 @@ public class KnowledgeGraph extends WebMvcConfigurerAdapter {
         Map<String, Object> map = null;
         if (input == null || input.length() == 0) {
             //map = paperService.graphAlc(200);
-            map = paperService.getPaperCitation(100);
+            map = paperService.getPaperCitation(200);
         } else {
             Integer limit = Integer.parseInt(input);
             //map = paperService.graphAlc(limit);
