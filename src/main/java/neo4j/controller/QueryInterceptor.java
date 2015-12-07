@@ -26,6 +26,8 @@ public class QueryInterceptor extends HandlerInterceptorAdapter   {
 		 map.put("getsmallWorldTheory", "smallWorldTheory.html");
 		 map.put("authorNetwork", "authornetwork.html");
 		 map.put("graphTest", "QueryTest2.html");
+		 map.put("paperCitation", "getCitation.html");
+		 map.put("getcategorize2", "categorize2.html");
 	}
 	
 	@Override

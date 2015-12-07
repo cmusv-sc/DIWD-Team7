@@ -140,7 +140,6 @@ public class KnowledgeGraph extends WebMvcConfigurerAdapter {
     	journal = journal.replace('+', ' ');
     	keywords = keywords.replace('+', ' ');
     	String newkey=keywords.replace("%2C", "|");
-    	//newkey = "(?i)^.*(" + newkey + ").*$";
     	map = paperService.categorize2(Integer.parseInt(from),Integer.parseInt(to),journal,newkey);
     	String json = "";
     	ObjectMapper mapper = new ObjectMapper();
