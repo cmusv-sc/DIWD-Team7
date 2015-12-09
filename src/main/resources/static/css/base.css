@@ -1,21 +1,34 @@
 body {
   background: #fff;
+  
 }
 h1,h2,h3,h4,h5 {
-	font-weight: 500;
+  font-weight: 500;
+}
+body.login {
+  background: #007da3; /* Old browsers */
+  background: -moz-linear-gradient(top,  #007da3 0%, #27b2c4 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top,  #007da3 0%,#27b2c4 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom,  #007da3 0%,#27b2c4 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#007da3', endColorstr='#27b2c4',GradientType=0 ); /* IE6-9 */
+  height: 100%;
+  min-height: 700px; 
 }
 .login-container {
-	max-width: 450px !important;
-	margin: 0 auto;
-	border: 1px solid #ccc;
-	padding: 30px;
+  max-width: 450px !important;
+  margin: 0 auto;
+  border: 1px solid #ccc;
+  padding: 30px;
+  background: #fefefe;
+  margin-top: 10%;
+  border-radius: 4px;
 }
 .login-container h2 {
-	text-align: center;
+  text-align: center;
 }
 .login-container .btn {
-	margin: 0 auto;
-	width:200px;
+  margin: 0 auto;
+  width:200px;
 }
 .jumbotron {
   /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#007da3+0,27b2c4+100 */
@@ -62,12 +75,9 @@ background: #007da3 url(../img/hero_graph_bg.png) left top no-repeat;
 }
 .content {
   background: #fff;
+  //border-radius: 4px;
 }
 
 strong {
   font-weight: 500;
-}
-
-.logout {
-    color: white;
 }
