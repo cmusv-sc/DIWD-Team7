@@ -25,6 +25,9 @@ public interface UserRepository extends GraphRepository<Paper> {
     
     @Query("match (u:User{username:{username}}), (u)-[:visit0]->(v) return v.path as path")
     List<Map<String, Object>> getlastpath(@Param("username") String username);
+    
+    @Query("create (u:User{username:{username} ,password:{password}})")
+    void createuser(@Param("username") String username, @Param("password") String password);
 }
 
 

@@ -67,3 +67,7 @@ background: #007da3 url(../img/hero_graph_bg.png) left top no-repeat;
 strong {
   font-weight: 500;
 }
+
+.logout {
+    color: white;
+}

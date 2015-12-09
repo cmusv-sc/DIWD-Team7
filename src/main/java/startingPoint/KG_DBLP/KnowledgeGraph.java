@@ -69,7 +69,7 @@ public class KnowledgeGraph extends WebMvcConfigurerAdapter {
     
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-      registry.addInterceptor(QueryInterceptor).excludePathPatterns("/login","/logout","/error");
+      registry.addInterceptor(QueryInterceptor).excludePathPatterns("/login","/logout","/error","/register","/createuser");
     }
 
     @RequestMapping("/graph")

@@ -7,19 +7,13 @@
   		<link rel="stylesheet" href="css/bootstrap.min.css"/>
       <link rel="stylesheet" href="css/base.css"/> 
     </head>
-    <body class="login">
+    <body>
     	<div class="login-container">
-    		<h2>Login</h2>
-	        <div th:if="${param.error}">
-	            Invalid username and password.
-	        </div>
-	        <div th:if="${param.logout}">
-	            You have been logged out.
-	        </div>
-	        <div th:if="${registered}">
-	            Register complete, please log in here.
-	        </div>
-	        <form th:action="@{/login}" method="post" class="form">
+    		<h2>Register</h2>
+	        <p th:if="${error}">
+	        <div th:utext="'Some error happened: ' + ${error}"/>
+	        </p>
+	        <form th:action="@{/createuser}" method="post" class="form">
 	            <div class="form-group">
 	            	<label for="username"> User Name : </label>
 	            	<input class="form-control" type="text" name="username"/>
@@ -29,11 +23,12 @@
 	            	<input class="form-control" type="password" name="password"/>
 	            </div>
 	            <div class="form-group">
+	            	<label for="password2"> Confirm Password: </label>
+	            	<input class="form-control" type="password2" name="password2"/>
+	            </div>
+	            <div class="form-group">
 	            	<input class="btn btn-lg btn-warning" type="submit" value="Sign In"/>
 	            </div>
-	        </form>
-	        <form th:action="@{/register}" class="form">
-	        	<input class="btn btn-lg btn-info" type="submit" value="Sign up"/>
 	        </form>
         </div>
     </body>

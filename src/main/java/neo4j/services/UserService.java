@@ -9,6 +9,8 @@ import neo4j.security.CurrentUser;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,5 +50,16 @@ public class UserService {
             	return row.get("path").toString();
     	}
     	return "";
+    }
+    
+    public boolean createuser(String username, String password) {
+    	Iterator<Map<String, Object>> result = userRepository.findUser(username).iterator();
+    	if (result.hasNext()) {
+            return false;
+    	}
+    	PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(); 
+    	String encodedPassword = passwordEncoder.encode(password);
+    	userRepository.createuser(username,encodedPassword);
+    	return true;
     }
 }

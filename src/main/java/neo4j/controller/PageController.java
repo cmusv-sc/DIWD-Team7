@@ -57,6 +57,45 @@ public class PageController {
         return "index";
     }
     
+    @RequestMapping(value = "/register", method = RequestMethod.GET)
+    public String register(final HttpServletRequest request, Model model) {
+        return "register";
+    }
+    
+    @RequestMapping(value = "/createuser", method = RequestMethod.POST)
+    public String createuser(final HttpServletRequest request, Model model) {
+    	String uname = request.getParameter("username");
+    	String pass = request.getParameter("password");
+    	String pass2 = request.getParameter("password2");
+    	boolean failure = false;
+    	StringBuilder sb = new StringBuilder();
+    	if (uname.length() == 0 || pass.length() == 0 || pass2.length() == 0)
+    	{
+    		failure = true;
+    		sb.append("<br/>");
+    		sb.append("All fields should be filled");
+    	}
+    	if (!pass.equals(pass2))
+    	{
+    		failure = true;
+    		sb.append("<br/>");
+    		sb.append("Passwords does not match");
+    	}
+    	if(userService.createuser(uname, pass) == false){
+    		failure = true;
+    		sb.append("<br/>");
+    		sb.append("username already exists");
+    	}
+    	if(failure){
+	    	model.addAttribute("error", sb.toString());
+    		return "register";		
+    	}
+    	else{
+    		model.addAttribute("registered", "registered");
+    		return "login";
+    	}
+    }
+    
     @RequestMapping(value="/")
     public String index(){
         return "redirect:/home";
