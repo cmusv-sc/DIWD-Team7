@@ -30,6 +30,8 @@ public class SecurityConfiger extends WebSecurityConfigurerAdapter {
         http
             .authorizeRequests()
             	.antMatchers("/css/**").permitAll()
+            	.antMatchers("/register**").permitAll()
+            	.antMatchers("/createuser**").permitAll()
             	.anyRequest().authenticated()
                 .and()
             .formLogin()
@@ -52,12 +54,5 @@ public class SecurityConfiger extends WebSecurityConfigurerAdapter {
                 .userDetailsService(userDetailsService)
                 .passwordEncoder(new BCryptPasswordEncoder());
     }
-    
-	@Autowired
-	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-	  auth.inMemoryAuthentication().withUser("mkyong").password("123456").roles("USER");
-	  auth.inMemoryAuthentication().withUser("admin").password("123456").roles("ADMIN");
-	  auth.inMemoryAuthentication().withUser("dba").password("123456").roles("DBA");
-	}
 
 }
