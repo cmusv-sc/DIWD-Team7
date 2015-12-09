@@ -237,6 +237,31 @@ public class KnowledgeGraph extends WebMvcConfigurerAdapter {
         System.out.println(json);
         return json;
     }
+
+    @RequestMapping("/depthNetwork")
+    public String getdepthnetwork(@RequestParam(value = "limit",required = false) String input) {
+        System.out.println(input);
+        Map<String, Object> map = null;
+        if (input == null || input.length() == 0) {
+            //map = paperService.graphAlc(200);
+            map = paperService.getDepthNetwork(200);
+        } else {
+            Integer limit = Integer.parseInt(input);
+            //map = paperService.graphAlc(limit);
+            map = paperService.getDepthNetwork(limit);
+        }
+        
+        String json = "";
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            //convert map to JSON string
+            json = mapper.writeValueAsString(map);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println(json);
+        return json;
+    }
     
     @RequestMapping("/paperCitation")
     public String getpapercitation(@RequestParam(value = "limit",required = false) String input) {
@@ -249,6 +274,34 @@ public class KnowledgeGraph extends WebMvcConfigurerAdapter {
             Integer limit = Integer.parseInt(input);
             //map = paperService.graphAlc(limit);
             map = paperService.getPaperCitation(limit);
+        }
+        
+        String json = "";
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            //convert map to JSON string
+            json = mapper.writeValueAsString(map);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println(json);
+        return json;
+    }
+
+    @RequestMapping("/topCitedPaper")
+    public String gettopcitedpaper(@RequestParam(value = "limit",required = false) String input, @RequestParam(value = "journal", required = false) String journal) {
+        System.out.println(input);
+        Map<String, Object> map = null;
+        journal = journal.replace('+', ' ');
+
+        if (input == null || input.length() == 0) {
+            //map = paperService.graphAlc(200);
+            map = paperService.getTopCitedPaper(200, journal);
+        } else {
+            Integer limit = Integer.parseInt(input);
+            
+            //map = paperService.graphAlc(limit);
+            map = paperService.getTopCitedPaper(limit, journal);
         }
         
         String json = "";

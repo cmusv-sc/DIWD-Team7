@@ -33,12 +33,20 @@ public interface PaperRepository extends GraphRepository<Paper> {
     @Query("MATCH (a:Author)-[:CO]->(b:Author) return a.name as author, collect(b.name) as cast LIMIT 50")
     List<Map<String, Object>> findAuthorNetwork(@Param("limit") int limit);
     
+    @Query("MATCH (a:Author)-[:CO*2]->(b:Author) return a.name as author, collect(b.name) as cast LIMIT 50")
+    List<Map<String, Object>> findDepthNetwork(@Param("limit") int limit);
+
     @Query("match (a:Author {name: {author1}}), (b:Author {name: {author2}}), p = shortestPath((a)-[*..10]-(b)) with extract(n IN nodes(p)| n.name)"
     		+ " as Authors unwind(Authors) as cast return cast")
     List<Map<String, String>> smallWorldTheory(@Param("author1") String author1, @Param("author2") String author2);
     
     @Query("match (pa:Paper)-[:CITE]->(pb:Paper) return pa.title as input, collect(pb.title) as cast LIMIT {limit}")
     List<Map<String, Object>> findPaperCitation(@Param("limit") int limit);
+
+    // @Query("match (pa:Paper)-[:CITE]->(pb:Paper) WHERE pb.journal = {journal} return pb.title as input, collect(pa.title) as cast LIMIT {limit}")
+    // List<Map<String, Object>> findTopCitedPaper(@Param("limit") int limit, @Param("journal") String journal);
+    @Query("match (pa:Paper)-[:CITE]->(pb:Paper) WHERE pb.journal = {journal} return pb.title, collect(pa.title) as cast, COUNT(pa) as connections ORDER BY COUNT(pa) DESC LIMIT {limit}")
+    List<Map<String, Object>> findTopCitedPaper(@Param("limit") int limit, @Param("journal") String journal);
 }
 
 
