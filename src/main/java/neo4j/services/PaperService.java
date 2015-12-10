@@ -104,26 +104,26 @@ public class PaperService {
         int target = 0;
         while (result.hasNext()) {
             Map<String, Object> row = result.next();
-            nodes.add(map6("id", i, "title",row.get("author"),"label", "author", "cluster", "1", "value", 2, "group", "author"));
-            target = i++;
-            for (Object name : (Collection) row.get("cast")) {
-                Map<String, Object> author = map5("title", 
-                        name,"label", "author", "cluster", "2", "value", 1, "group", "author");
-                int source = 0;
-                for (int j = 0; j < nodes.size(); j++) {
-                    if (nodes.get(j).get("title").equals(name)) {
-                        source = (int) nodes.get(j).get("id");
-                        break;
-                    } 
-                }
-                if (source == 0) {
-                    author.put("id", i);
-                    source = i;
-                    i++;
-                    nodes.add(author);
-                }
-                rels.add(map("source",source,"target",target));
-            }
+            // nodes.add(map6("id", i, "title",row.get("input"),"label", "author", "cluster", "1", "value", 2, "group", "author"));
+            // target = i++;
+            // for (Object name : (Collection) row.get("cast")) {
+            //     Map<String, Object> author = map5("title", 
+            //             name,"label", "author", "cluster", "2", "value", 1, "group", "author");
+            //     int source = 0;
+            //     for (int j = 0; j < nodes.size(); j++) {
+            //         if (nodes.get(j).get("title").equals(name)) {
+            //             source = (int) nodes.get(j).get("id");
+            //             break;
+            //         } 
+            //     }
+            //     if (source == 0) {
+            //         author.put("id", i);
+            //         source = i;
+            //         i++;
+            //         nodes.add(author);
+            //     }
+            //     rels.add(map("source",source,"target",target));
+            // }
         }
         return map("nodes", nodes, "links", rels);
     }
@@ -178,7 +178,7 @@ public class PaperService {
             target = i++;
             for (Object name : (Collection) row.get("cast")) {
                 Map<String, Object> author = map5("title", 
-                        name,"label", "paper", "cluster", "2", "value", 1, "group", "count");
+                        name,"label", "paper", "cluster", "2", "value", 1, "group", "paper");
                 int source = 0;
                 for (int j = 0; j < nodes.size(); j++) {
                     if (nodes.get(j).get("title").equals(name)) {
@@ -447,8 +447,8 @@ public class PaperService {
         return toD3FormatAuthorNetwork(result);
     }
     
-    public Map<String, Object> getDepthNetwork(int limit) {
-        Iterator<Map<String, Object>> result = paperRepository.findDepthNetwork(limit).iterator();
+    public Map<String, Object> getDepthNetwork(int limit, String name) {
+        Iterator<Map<String, Object>> result = paperRepository.findDepthNetwork(limit, name).iterator();
         return toD3FormatDepthNetwork(result);
     }
 

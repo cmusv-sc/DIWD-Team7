@@ -239,16 +239,17 @@ public class KnowledgeGraph extends WebMvcConfigurerAdapter {
     }
 
     @RequestMapping("/depthNetwork")
-    public String getdepthnetwork(@RequestParam(value = "limit",required = false) String input) {
+    public String getdepthnetwork(@RequestParam(value = "limit",required = false) String input, @RequestParam(value = "name",required = false) String name) {
         System.out.println(input);
         Map<String, Object> map = null;
+        name = name.replace('+', ' ');
         if (input == null || input.length() == 0) {
             //map = paperService.graphAlc(200);
-            map = paperService.getDepthNetwork(200);
+            map = paperService.getDepthNetwork(200, name);
         } else {
             Integer limit = Integer.parseInt(input);
             //map = paperService.graphAlc(limit);
-            map = paperService.getDepthNetwork(limit);
+            map = paperService.getDepthNetwork(limit, name);
         }
         
         String json = "";
@@ -296,7 +297,7 @@ public class KnowledgeGraph extends WebMvcConfigurerAdapter {
 
         if (input == null || input.length() == 0) {
             //map = paperService.graphAlc(200);
-            map = paperService.getTopCitedPaper(200, journal);
+            map = paperService.getTopCitedPaper(50, journal);
         } else {
             Integer limit = Integer.parseInt(input);
             
