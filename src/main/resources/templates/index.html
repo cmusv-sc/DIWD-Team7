@@ -50,8 +50,15 @@
 		</form>
 		<br/>
 
+		<form id="Q2" action="multiDepth.html" method="get" class="form-inline">
+			<p> <strong>2. Multi depth network. </strong></p>
+			<input type= "text" name="name" id="name" class="form-control" value= "Walter Vogler" />
+			<input type="submit" name="button" id="button" class="btn btn-warning" value="Submit"/>
+		</form>
+		<br/>
+
 		<form id ="Q7" action="categorize.html" method="get" class="form-inline">
-			<p><strong> 5. Given a timeline of years for a set of authors, generate a graph showing their publications per year.</strong> </p>
+			<p><strong> 7. Categorize the research papers (given time period).</strong> </p>
 			<input type= "text" name="from" id="from" value= "2000" class="form-control"/>
 			<input type= "text" name="to" id="to" value= "2010" class="form-control"/>
 			<input type="submit" name="button" id="button" value="Submit" class="btn btn-warning"/>
@@ -65,6 +72,15 @@
 		</form>
 		<br/>
 		
+		<form id = "Q14" action="getTopCitedPaper.html" method="get" class="form-inline">
+			<p> <strong>8. List the top cited papers. </strong></p>
+			<input type= "text" name="limit" id="limit" value= "" placeholer="number of queries" class="form-control" />
+			<input type= "text" name="journal" id="journal" value= "Acta Inf." class="form-control" />
+			<!-- <input type= "text" name="year" id="year" value= "2010" class="form-control"/> -->
+			<input type="submit" name="button" id="button" class="btn btn-warning" value="Submit" />
+		</form>
+		<br/>
+
 		<form id ="Q11" action="smallWorldTheory.html" method="get" class="form-inline">
 			<p><strong>11. Given a researcher name, find out a path that will lead you to connect to the researcher (prove the small-world theory).</strong> </p>
 			<input type= "text" name="author1" id="author1" value= "Walter Vogler" class="form-control"/>
@@ -99,6 +115,14 @@
 		</form>
 		<br/>
 		
+		<form id = "Q6" action="topKrelatedPapers.html" method="get" class="form-inline">
+			<p> <strong>6. Given some keywords, generate a graph of top k related papers together with their authors.</strong></p>
+			<input type= "text" name="keywords" id="keywords" value= "computer, algorithms, distributed, system, optimization, solution" class="form-control" />
+			<input type= "text" name="k" id="k" value= "50" class="form-control"/>
+			<input type="submit" name="button" id="button" class="btn btn-warning" value="Submit" />
+		</form>
+		<br/>
+		
 		<form role="form" id ="follow" action="/follow" method="get" class="form-inline">
 			<p> <strong> Manage user following</strong></p>
 		  <div class="form-group">
@@ -122,8 +146,8 @@
 			  <input type="submit" name="button" id="button" class="btn btn-warning" value="submit" />
 		  </div> 
 		</form>
-
 		<br/>
+		
 		<p> <strong> 18. Develop a user-friendly web portal to support the data analytics. </strong></p>
 		<p>Finished</p>
 		<br/>

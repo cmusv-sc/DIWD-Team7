@@ -124,6 +124,31 @@ public class KnowledgeGraph extends WebMvcConfigurerAdapter {
     	return json;
     }
     
+    @RequestMapping("/topKrelated")
+    public String topKrelatedPapers(@RequestParam(value = "keywords",required = false) String keywords, @RequestParam(value = "k", required = false) String k) {
+    	System.out.println(keywords);
+    	keywords = keywords.replace("%2C", " ");
+    	keywords = keywords.replace('+', ' ');
+    	System.out.println("after replace : " + keywords);
+    	String[] words = keywords.split("  ");
+    	for (int i = 0; i < words.length; i++) {
+    		words[i] = words[i].trim();
+    	}
+    	int num = Integer.parseInt(k);
+    	
+    	//System.out.println(num);
+    	String json = "";
+    	Map<String, Object> map = paperService.getKRelated(words, num);
+    	ObjectMapper mapper = new ObjectMapper();
+    	try {
+    		//convert map to JSON string
+    		json = mapper.writeValueAsString(map);
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
+    	return json;
+    }
+    
     @RequestMapping("/getcategorize2")
     public String categorize2(@RequestParam(value = "from",required = false) String from, @RequestParam(value = "to",required = false) String to, @RequestParam(value = "journal",required = false) String journal, @RequestParam(value = "keywords",required = false) String keywords) {
     	System.out.println(from);
@@ -237,6 +262,32 @@ public class KnowledgeGraph extends WebMvcConfigurerAdapter {
         System.out.println(json);
         return json;
     }
+
+    @RequestMapping("/depthNetwork")
+    public String getdepthnetwork(@RequestParam(value = "limit",required = false) String input, @RequestParam(value = "name",required = false) String name) {
+        System.out.println(input);
+        Map<String, Object> map = null;
+        name = name.replace('+', ' ');
+        if (input == null || input.length() == 0) {
+            //map = paperService.graphAlc(200);
+            map = paperService.getDepthNetwork(200, name);
+        } else {
+            Integer limit = Integer.parseInt(input);
+            //map = paperService.graphAlc(limit);
+            map = paperService.getDepthNetwork(limit, name);
+        }
+        
+        String json = "";
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            //convert map to JSON string
+            json = mapper.writeValueAsString(map);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println(json);
+        return json;
+    }
     
     @RequestMapping("/paperCitation")
     public String getpapercitation(@RequestParam(value = "limit",required = false) String input) {
@@ -249,6 +300,34 @@ public class KnowledgeGraph extends WebMvcConfigurerAdapter {
             Integer limit = Integer.parseInt(input);
             //map = paperService.graphAlc(limit);
             map = paperService.getPaperCitation(limit);
+        }
+        
+        String json = "";
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            //convert map to JSON string
+            json = mapper.writeValueAsString(map);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println(json);
+        return json;
+    }
+
+    @RequestMapping("/topCitedPaper")
+    public String gettopcitedpaper(@RequestParam(value = "limit",required = false) String input, @RequestParam(value = "journal", required = false) String journal) {
+        System.out.println(input);
+        Map<String, Object> map = null;
+        journal = journal.replace('+', ' ');
+
+        if (input == null || input.length() == 0) {
+            //map = paperService.graphAlc(200);
+            map = paperService.getTopCitedPaper(50, journal);
+        } else {
+            Integer limit = Integer.parseInt(input);
+            
+            //map = paperService.graphAlc(limit);
+            map = paperService.getTopCitedPaper(limit, journal);
         }
         
         String json = "";

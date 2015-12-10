@@ -1,0 +1,136 @@
+<!doctype html>
+<html>
+<head>
+  <title>Query 3 - Multidepth author network </title>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/graph.css"> 
+  <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+  <script type="text/javascript" src="javascript/jquery-2.1.4.js"></script>
+
+  <script type="text/javascript">
+    var nodes = null;
+    var edges = null;
+    var network = null;
+    
+    var width = 600, height = 600;
+
+    function draw() {
+      var test = null;
+	  var params = {};
+      var param_array = window.location.href.split('?')[1].split('&');
+      for(var i in param_array){
+          x = param_array[i].split('=');
+          params[x[0]] = x[1];
+      }
+	  var d3trans = null;
+	  var d3scale = null;
+      console.log(params);
+      $.ajax({
+	  	  url: "depthNetwork",
+	  	  type: "GET",
+	  	  contentType: "application/json",
+	  	  data: params
+	  	  //data: params["limit"]
+	  	}).done(function(data) {
+	  		console.log("hahahaha" + data);
+	        var data = JSON.parse(data);
+	        var color = d3.scale.linear().domain([0, 10]).range([1000,1]);
+	        
+	        var svg = d3.select('#mynetwork').append('svg')
+    		.attr('width', width)
+    		.attr('height', height)
+    		.call(d3.behavior.zoom().on("zoom", redraw));
+    		
+    		var vis = svg.append('svg:g');
+    		
+    		function redraw() {
+			  vis.attr("transform",
+			      "translate(" + d3.event.translate + ")"
+			      + " scale(" + d3.event.scale + ")");
+			  d3trans = d3.event.translate;
+			  d3scale = d3.event.scale;
+			}
+    		
+    		function mouseover(d) {
+			    d3.select(this).append("text")
+			        .attr("class", "hover")
+			        .attr('transform', function(d){ 
+			            return 'translate(5, -10)';
+			        })
+			        .text(d.group + " : " + d.title);
+			}
+			
+			function mouseout(d) {
+			    d3.select(this).select("text.hover").remove();
+			}
+
+    		var drawGraph = function() {
+	    		var force = d3.layout.force()
+			    .size([width, height])
+			    .nodes(data.nodes)
+			    .links(data.links)
+			    .start();
+			    
+			    var link = vis.selectAll('.link')
+			    .data(data.links)
+			    .enter().append('line')
+			    .attr('class', 'link');
+			
+				var gnode = vis.selectAll('g.gnode')
+			    .data(data.nodes)
+			    .enter()
+			    .append('g')
+	            .classed('gnode', true)
+	            .on("mouseover", mouseover)
+      			.on("mouseout", mouseout);
+			    
+			    var node = gnode.append("circle")
+				.attr("class", "node")
+				.attr("r", 7)
+				.style("fill", function(d) { return color(d.group); })
+				.call(force.drag);
+			    
+			    force.on('tick', function() {
+			    
+			    	if(d3trans != null){
+					  	vis.attr("transform",
+					      "translate(" + d3trans + ")"
+					      + " scale(" + d3scale + ")");
+				    }
+			    
+				    gnode.attr("transform", function(d) { 
+					    return 'translate(' + [d.x, d.y] + ')'; 
+					});			
+	
+				    link.attr('x1', function(d) { return d.source.x; })
+				        .attr('y1', function(d) { return d.source.y; })
+				        .attr('x2', function(d) { return d.target.x; })
+				        .attr('y2', function(d) { return d.target.y; });
+				        
+				        
+				});
+		   }; 
+		   drawGraph();
+		  
+	  	});
+    }
+  </script>
+  <script src="javascript/googleAnalytics.js"></script>
+</head>
+<body onload="draw()">
+  <div class="container">
+    <h3> Multi depth collaboration author Network </h3>
+    <div id="mynetwork"></div>
+    <div id="graphText">
+      <div class="row">
+        <div class="col-lg-6" id="testGraph">
+        </div>
+        <div class="col-lg-6" id="testText">
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
