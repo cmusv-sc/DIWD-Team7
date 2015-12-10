@@ -24,7 +24,7 @@
 					<li>Minghan Chen </li>
 					<li>Kun-Lin Lee </li>
 					<li>Johnny Shen </li>
-					<li>Hoa Vu</li>
+					<li>Hoa Vu </li>
 				</ul>
 				<div class="network"></div>
 			</div>
@@ -57,8 +57,16 @@
 		</form>
 		<br/>
 
-		<form id ="Q7" action="categorize.html" method="get" class="form-inline">
+		<form id ="Q5" action="categorize.html" method="get" class="form-inline">
 			<p><strong> 5. Given a timeline of years for a set of authors, generate a graph showing their publications per year.</strong> </p>
+			<input type= "text" name="from" id="from" value= "2000" class="form-control"/>
+			<input type= "text" name="to" id="to" value= "2010" class="form-control"/>
+			<input type="submit" name="button" id="button" value="Submit" class="btn btn-warning"/>
+		</form>
+		<br/>
+
+		<form id ="Q7" action="categorize.html" method="get" class="form-inline">
+			<p><strong> 7. Categorize the research papers (given time period).</strong> </p>
 			<input type= "text" name="from" id="from" value= "2000" class="form-control"/>
 			<input type= "text" name="to" id="to" value= "2010" class="form-control"/>
 			<input type="submit" name="button" id="button" value="Submit" class="btn btn-warning"/>
@@ -127,6 +135,31 @@
 			<p> <strong>15. Given some keywords, search for researchers who are experts in the field.</strong></p>
 			<input type= "text" name="keywords" id="keywords" value= "distributed, system, optimization" class="form-control" />
 			<input type="submit" name="button" id="button" class="btn btn-warning" value="Submit" />
+		</form>
+		<br/>
+			
+		<form role="form" id ="follow" action="/follow" method="get" class="form-inline">
+			<p> <strong> Manage user following</strong></p>
+		  <div class="form-group">
+			  <input type="submit" name="button" id="button" class="btn btn-warning" value="submit" />
+		  </div> 
+		</form>
+		<br/>
+		
+		<form role="form" id ="followedself" action="/followedself" method="get" class="form-inline">
+			<p> <strong> See your follower </strong></p>
+		  <div class="form-group">
+			  <input type="submit" name="button" id="button" class="btn btn-warning" value="submit" />
+		  </div> 
+		</form>
+		<br/>
+		
+		<form role="form" id ="followedother" action="/followedother" method="get" class="form-inline">
+			<p> <strong> See other people's followers </strong></p>
+		  <div class="form-group">
+		    <input type= "text" name="uid" id="uid" class="form-control" value= "user" />
+			  <input type="submit" name="button" id="button" class="btn btn-warning" value="submit" />
+		  </div> 
 		</form>
 		<br/>
 		

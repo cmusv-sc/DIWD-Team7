@@ -28,6 +28,18 @@ public interface UserRepository extends GraphRepository<Paper> {
     
     @Query("create (u:User{username:{username} ,password:{password}})")
     void createuser(@Param("username") String username, @Param("password") String password);
+    
+    @Query("match(n:User) where n.username<> {username} with n optional match (u:User), (u)-[f:FOLLOWS]->(n) where u.username={username} return n.username as name, CASE when f is null then '0' else '1' END  as condition")
+    List<Map<String, Object>> getfollowlist(@Param("username") String username);
+    
+    @Query("match (u:User)-[:FOLLOWS]->(t:User) where t.username={username} return u.username as name")
+    List<Map<String, Object>> getfollowers(@Param("username") String username);
+    
+    @Query("match(u:User{username:{from}}) with u match (t:User{username:{to}}) CREATE UNIQUE (u)-[:FOLLOWS]->(t)")
+    void createfollow(@Param("from") String from, @Param("to") String to);
+    
+    @Query("MATCH (u:User)-[f:FOLLOWS]->(t:User) where u.username = {from} and t.username = {to} delete f")
+    void deletefollow(@Param("from") String from, @Param("to") String to);
 }
 
 

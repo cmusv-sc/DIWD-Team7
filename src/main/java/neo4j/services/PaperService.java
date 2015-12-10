@@ -133,29 +133,34 @@ public class PaperService {
         List<Map<String,Object>> nodes = new ArrayList<Map<String,Object>>();
         List<Map<String,Object>> rels = new ArrayList<Map<String,Object>>();
         int i = 0;
-        int target = 0;
         while (result.hasNext()) {
             Map<String, Object> row = result.next();
-            nodes.add(map6("id", i, "title",row.get("author"),"label", "author", "cluster", "1", "value", 2, "group", "author"));
-            target = i++;
-            for (Object name : (Collection) row.get("cast")) {
-                Map<String, Object> author = map5("title", 
-                        name,"label", "author", "cluster", "2", "value", 1, "group", "author");
-                int source = 0;
-                for (int j = 0; j < nodes.size(); j++) {
-                    if (nodes.get(j).get("title").equals(name)) {
-                        source = (int) nodes.get(j).get("id");
-                        break;
-                    } 
-                }
-                if (source == 0) {
-                    author.put("id", i);
-                    source = i;
-                    i++;
-                    nodes.add(author);
-                }
-                rels.add(map("source",source,"target",target));
+            String user1 = row.get("user1").toString();
+            String user2 = row.get("user2").toString();
+            int source = -1;
+            int target = -1;
+            
+            for (int j = 0; j < nodes.size(); j++) {
+            	if (nodes.get(j).get("title").equals(user1)) {
+                	source = (int) nodes.get(j).get("id");
+                } 
+            	if (nodes.get(j).get("title").equals(user2)) {
+                	target = (int) nodes.get(j).get("id");
+                } 
             }
+            if (source == -1){
+            	nodes.add(map6("id", i, "title", 
+                        user1,"label", "author", "cluster", "2", "value", 1, "group", "author"));
+            	source = i;
+            	i++;
+            }
+            if (target == -1){
+            	nodes.add(map6("id", i, "title", 
+                        user2,"label", "author", "cluster", "2", "value", 1, "group", "author"));
+            	target = i;
+            	i++;
+            }
+            rels.add(map("source",source,"target",target));            
         }
         return map("nodes", nodes, "links", rels);
     }
@@ -204,7 +209,7 @@ public class PaperService {
             target = i++;
             for (Object name : (Collection) row.get("cast")) {
                 Map<String, Object> author = map5("title", 
-                        name,"label", "paper", "cluster", "2", "value", 1, "group", "count");
+                        name,"label", "paper", "cluster", "2", "value", 1, "group", "paper");
                 int source = 0;
                 for (int j = 0; j < nodes.size(); j++) {
                     if (nodes.get(j).get("title").equals(name)) {
@@ -485,8 +490,8 @@ public class PaperService {
         return toD3FormatAuthorNetwork(result);
     }
     
-    public Map<String, Object> getDepthNetwork(int limit) {
-        Iterator<Map<String, Object>> result = paperRepository.findDepthNetwork(limit).iterator();
+    public Map<String, Object> getDepthNetwork(int limit, String name) {
+        Iterator<Map<String, Object>> result = paperRepository.findDepthNetwork(limit, name).iterator();
         return toD3FormatDepthNetwork(result);
     }
 
