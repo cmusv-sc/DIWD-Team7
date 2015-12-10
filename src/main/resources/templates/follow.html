@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+    <head>
+        <title>Spring Security Example </title>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  		<link rel="stylesheet" href="css/bootstrap.min.css"/>
+      <link rel="stylesheet" href="css/base.css"/> 
+    </head>
+    <body>
+    	<div class="login-container">
+	    	<table>
+		      <tr>
+		      	<th>User Name</th>
+		      	<th></th>
+		      	<th>Action</th>
+		      </tr>
+		      <tr th:each="f : ${followlist}">
+		      	<td th:text="${f.name}"></td>
+		      	<td></td>
+		      	<td th:if="${f.status} == '0'" ><a th:href="@{/dofollow(from=${cuser},to=${f.name})}">subscribe</a></td>
+		      	<td th:if="${f.status} == '1'" ><a th:href="@{/unfollow(from=${cuser},to=${f.name})}">unsubscribe</a></td>
+		      </tr>
+		    </table>
+		</div>
+    </body>
+</html>

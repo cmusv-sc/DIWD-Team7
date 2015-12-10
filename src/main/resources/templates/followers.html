@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+    <head>
+        <title>Spring Security Example </title>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  		<link rel="stylesheet" href="css/bootstrap.min.css"/>
+      <link rel="stylesheet" href="css/base.css"/> 
+    </head>
+    <body>
+    	<div class="login-container">
+	    	<table>
+		      <tr>
+		      	<th>User Name</th>
+		      </tr>
+		      <tr th:each="f : ${followlist}">
+		      	<td th:text="${f.name}"></td>
+		      </tr>
+		    </table>
+		</div>
+    </body>
+</html>

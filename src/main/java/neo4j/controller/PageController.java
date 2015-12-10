@@ -17,6 +17,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import java.io.IOException;
 import java.security.Principal;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -94,6 +95,45 @@ public class PageController {
     		model.addAttribute("registered", "registered");
     		return "login";
     	}
+    }
+    
+    @RequestMapping(value = "/follow", method = RequestMethod.GET)
+    public String follow(final HttpServletRequest request, Principal principal, Model model) {
+    	List<Follower> followers = userService.getfollowlist(principal.getName());
+    	model.addAttribute("cuser", principal.getName());
+    	model.addAttribute("followlist", followers);
+        return "follow";
+    }
+    
+    @RequestMapping(value = "/dofollow", method = RequestMethod.GET)
+    public String dofollow(final HttpServletRequest request, Principal principal, Model model) {
+    	String from = request.getParameter("from");
+    	String to = request.getParameter("to");
+    	userService.createfollow(from,to);
+        return follow(request, principal, model);
+    }
+    
+    @RequestMapping(value = "/unfollow", method = RequestMethod.GET)
+    public String unfollow(final HttpServletRequest request, Principal principal, Model model) {
+    	String from = request.getParameter("from");
+    	String to = request.getParameter("to");
+    	userService.deletefollow(from,to);
+    	return follow(request, principal, model);
+    }
+    
+    @RequestMapping(value = "/followedself", method = RequestMethod.GET)
+    public String followedself(final HttpServletRequest request, Principal principal, Model model) {
+    	List<Follower> followers = userService.getfollowers(principal.getName());
+    	model.addAttribute("followlist", followers);
+    	return "followers";
+    }
+    
+    @RequestMapping(value = "/followedother", method = RequestMethod.GET)
+    public String followedother(final HttpServletRequest request, Principal principal, Model model) {
+    	String uid = request.getParameter("uid");
+    	List<Follower> followers = userService.getfollowers(uid);
+    	model.addAttribute("followlist", followers);
+    	return "followers";
     }
     
     @RequestMapping(value="/")
