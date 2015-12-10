@@ -128,6 +128,38 @@ public class PaperService {
         return map("nodes", nodes, "links", rels);
     }
 
+    @SuppressWarnings("rawtypes")
+    private Map<String, Object> toD3FormatDepthNetwork(Iterator<Map<String, Object>> result) {
+        List<Map<String,Object>> nodes = new ArrayList<Map<String,Object>>();
+        List<Map<String,Object>> rels = new ArrayList<Map<String,Object>>();
+        int i = 0;
+        int target = 0;
+        while (result.hasNext()) {
+            Map<String, Object> row = result.next();
+            nodes.add(map6("id", i, "title",row.get("author"),"label", "author", "cluster", "1", "value", 2, "group", "author"));
+            target = i++;
+            for (Object name : (Collection) row.get("cast")) {
+                Map<String, Object> author = map5("title", 
+                        name,"label", "author", "cluster", "2", "value", 1, "group", "author");
+                int source = 0;
+                for (int j = 0; j < nodes.size(); j++) {
+                    if (nodes.get(j).get("title").equals(name)) {
+                        source = (int) nodes.get(j).get("id");
+                        break;
+                    } 
+                }
+                if (source == 0) {
+                    author.put("id", i);
+                    source = i;
+                    i++;
+                    nodes.add(author);
+                }
+                rels.add(map("source",source,"target",target));
+            }
+        }
+        return map("nodes", nodes, "links", rels);
+    }
+
 	@SuppressWarnings("rawtypes")
     private Map<String, Object> toD3FormatPaperCitation(Iterator<Map<String, Object>> result) {
         List<Map<String,Object>> nodes = new ArrayList<Map<String,Object>>();
@@ -141,6 +173,44 @@ public class PaperService {
             for (Object name : (Collection) row.get("cast")) {
                 Map<String, Object> author = map5("title", 
                         name,"label", "author", "cluster", "2", "value", 1, "group", "author");
+                int source = 0;
+                for (int j = 0; j < nodes.size(); j++) {
+                    if (nodes.get(j).get("title").equals(name)) {
+                        source = (int) nodes.get(j).get("id");
+                        break;
+                    } 
+                }
+                if (source == 0) {
+                    author.put("id", i);
+                    source = i;
+                    i++;
+                    nodes.add(author);
+                }
+                rels.add(map("source",source,"target",target));
+            }
+        }
+        return map("nodes", nodes, "links", rels);
+    }
+
+    @SuppressWarnings("rawtypes")
+    private Map<String, Object> toD3FormatTopCitedPaper(Iterator<Map<String, Object>> result) {
+        List<Map<String,Object>> nodes = new ArrayList<Map<String,Object>>();
+        List<Map<String,Object>> rels = new ArrayList<Map<String,Object>>();
+        int i = 0;
+        int target = 0;
+        while (result.hasNext()) {
+            // Map<String, String> row = result.next();
+            // nodes.add(map6("id", i, "title",row.get("input"),"label", "paper", "cluster", "1", "value", 2, "group", "paper"));
+            // if (i != 0) {
+            //     rels.add(map("source", i - 1,"target", i));
+            // }
+            // i++;
+            Map<String, Object> row = result.next();
+            nodes.add(map6("id", i, "title",row.get("input"),"label", "paper", "cluster", "1", "value", 2, "group", "paper"));
+            target = i++;
+            for (Object name : (Collection) row.get("cast")) {
+                Map<String, Object> author = map5("title", 
+                        name,"label", "paper", "cluster", "2", "value", 1, "group", "count");
                 int source = 0;
                 for (int j = 0; j < nodes.size(); j++) {
                     if (nodes.get(j).get("title").equals(name)) {
@@ -409,6 +479,11 @@ public class PaperService {
         return toD3FormatAuthorNetwork(result);
     }
     
+    public Map<String, Object> getDepthNetwork(int limit) {
+        Iterator<Map<String, Object>> result = paperRepository.findDepthNetwork(limit).iterator();
+        return toD3FormatDepthNetwork(result);
+    }
+
     public Map<String, Object> proveSmallWorld(String author1, String author2) {
     	Iterator<Map<String, String>> result = paperRepository.smallWorldTheory(author1, author2).iterator();
 
@@ -419,11 +494,17 @@ public class PaperService {
         Iterator<Map<String, Object>> result = paperRepository.findPaperCitation(limit).iterator();
         return toD3FormatPaperCitation(result);
     }
-    
+  
     public Map<String, Object> getKRelated(String[] words, int k) {
     	Iterator<Map<String, Object>> result = paperRepository.topKRelated(words, k).iterator();
         
     	return toD3FormatKrelatedPaper(result);
+    }
+
+
+    public Map<String, Object> getTopCitedPaper(int limit, String journal) {
+        Iterator<Map<String, Object>> result = paperRepository.findTopCitedPaper(limit, journal).iterator();
+        return toD3FormatTopCitedPaper(result);
     }
 }
 
