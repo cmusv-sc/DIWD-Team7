@@ -33,7 +33,7 @@ public interface PaperRepository extends GraphRepository<Paper> {
     @Query("MATCH (a:Author)-[:CO]->(b:Author) return a.name as author, collect(b.name) as cast LIMIT {limit}")
     List<Map<String, Object>> findAuthorNetwork(@Param("limit") int limit);
     
-    @Query("match (a:Author)-[:CO*3]-(b:Author) where a.name= {name} with collect(distinct b) as c match (u:Author)-[:CO]-(v:Author) where u in c and v in c return u,v LIMIT {limit}")
+    @Query("match (a:Author)-[:CO*3]-(b:Author) where a.name= {name} with collect(distinct b) as c match (u:Author)-[:CO]-(v:Author) where u in c and v in c return u.name as user1,v.name as user2")
     List<Map<String, Object>> findDepthNetwork(@Param("limit") int limit, @Param("name") String name);
 
     @Query("match (a:Author {name: {author1}}), (b:Author {name: {author2}}), p = shortestPath((a)-[*..10]-(b)) with extract(n IN nodes(p)| n.name)"

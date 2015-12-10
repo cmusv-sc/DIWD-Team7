@@ -28,6 +28,11 @@ public class QueryInterceptor extends HandlerInterceptorAdapter   {
 		 map.put("graphTest", "QueryTest2.html");
 		 map.put("paperCitation", "getCitation.html");
 		 map.put("getcategorize2", "categorize2.html");
+		 map.put("depthNetwork", "multiDepth.html");
+		 map.put("topCitedPaper", "getTopCitedPaper.html");
+		 map.put("topKrelated", "topKrelatedPapers.html");
+		 map.put("followedself", "followedself");
+		 map.put("followedother", "followedother");
 	}
 	
 	@Override
