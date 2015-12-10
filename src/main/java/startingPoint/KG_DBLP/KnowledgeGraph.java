@@ -124,6 +124,31 @@ public class KnowledgeGraph extends WebMvcConfigurerAdapter {
     	return json;
     }
     
+    @RequestMapping("/topKrelated")
+    public String topKrelatedPapers(@RequestParam(value = "keywords",required = false) String keywords, @RequestParam(value = "k", required = false) String k) {
+    	System.out.println(keywords);
+    	keywords = keywords.replace("%2C", " ");
+    	keywords = keywords.replace('+', ' ');
+    	System.out.println("after replace : " + keywords);
+    	String[] words = keywords.split("  ");
+    	for (int i = 0; i < words.length; i++) {
+    		words[i] = words[i].trim();
+    	}
+    	int num = Integer.parseInt(k);
+    	
+    	//System.out.println(num);
+    	String json = "";
+    	Map<String, Object> map = paperService.getKRelated(words, num);
+    	ObjectMapper mapper = new ObjectMapper();
+    	try {
+    		//convert map to JSON string
+    		json = mapper.writeValueAsString(map);
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
+    	return json;
+    }
+    
     @RequestMapping("/getcategorize2")
     public String categorize2(@RequestParam(value = "from",required = false) String from, @RequestParam(value = "to",required = false) String to, @RequestParam(value = "journal",required = false) String journal, @RequestParam(value = "keywords",required = false) String keywords) {
     	System.out.println(from);
