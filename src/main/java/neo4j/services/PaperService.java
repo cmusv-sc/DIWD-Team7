@@ -311,15 +311,6 @@ public class PaperService {
             nodes.add(map6("id", i, "title",row.get("paper"),"label", "paper", "cluster", "2", "value", 2, "group", "paper"));
             target = i++;
             int source = -1;
-        	if (row.get("paper").toString().contains("Relaxed balance")) {
-        		System.out.println("test");
-        		if (row.get("paper").toString().contains("search")) {
-        			System.out.println("test2");
-        		}
-        		if (Pattern.compile(Pattern.quote("search"), Pattern.CASE_INSENSITIVE).matcher(row.get("paper").toString()).find()){
-        			System.out.println("test3");
-        		}
-    		}
             for (int c = 0; c < category.length-1; c++) {
             	/*if (row.get("paper").toString().contains(category[c])) {
             		source = c;
@@ -334,6 +325,34 @@ public class PaperService {
             	rels.add(map("source",source,"target",target));
             }
             
+        }
+        return map("nodes", nodes, "links", rels);
+    }
+	
+	private Map<String, Object> toD3FormatTimeline(Iterator<Map<String, Object>> result) {
+        List<Map<String,Object>> nodes = new ArrayList<Map<String,Object>>();
+        List<Map<String,Object>> rels = new ArrayList<Map<String,Object>>();
+        int i = 0;
+        int source = 0;
+        while (result.hasNext()) {
+            Map<String, Object> row = result.next();
+            String pname = row.get("paper").toString();
+            String year = row.get("year").toString();
+            nodes.add(map6("id", i, "title",pname,"label", "paper", "cluster", "1", "value", 1, "group", "paper"));
+            source = i++;
+            int target = -1;
+            for (int j = 0; j < nodes.size(); j++) {
+            	if (nodes.get(j).get("title").equals(year)) {
+            		target = (int) nodes.get(j).get("id");
+            		break;
+            	} 
+            }
+            
+            if (target == -1) {
+            	nodes.add(map6("id", i, "title",year,"label", "year", "cluster", "2", "value", 2, "group", "year"));
+            	target = i++;
+            }
+        	rels.add(map("source",source,"target",target));
         }
         return map("nodes", nodes, "links", rels);
     }
@@ -477,6 +496,12 @@ public class PaperService {
         String[] topkeyword = getTopKeywords(result);
         Iterator<Map<String, Object>> result2 = paperRepository.findPaperYJK(from,to,journal,keywords).iterator();
         return toD3FormatCategorize(result2, topkeyword);
+    }
+    
+    public Map<String, Object> timeline(int from, int to, String authors) {
+    	System.out.println(authors);
+        Iterator<Map<String, Object>> result = paperRepository.findPaperTA(from,to,authors).iterator();
+        return toD3FormatTimeline(result);
     }
     
     public Map<String, Object> getAuthorNetwork(int limit) {

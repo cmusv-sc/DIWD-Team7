@@ -177,6 +177,32 @@ public class KnowledgeGraph extends WebMvcConfigurerAdapter {
     	return json;
     }
     
+    @RequestMapping("/gettimeline")
+    public String timeline(@RequestParam(value = "from",required = false) String from, @RequestParam(value = "to",required = false) String to, @RequestParam(value = "authors",required = false) String authors) {
+    	System.out.println(from);
+    	System.out.println(to);
+    	System.out.println(authors);
+    	Map<String, Object> map = null;
+    	if (from == null || from.length() == 0) {
+    		from = "1900";
+    	} 
+    	if (from == null || from.length() == 0)  {
+    		to = "2100";
+    	}
+    	String au = authors.replace('+', ' ');
+    	String newkey=au.replace("%2C", "|");
+    	map = paperService.timeline(Integer.parseInt(from),Integer.parseInt(to),newkey);
+    	String json = "";
+    	ObjectMapper mapper = new ObjectMapper();
+    	try {
+    		//convert map to JSON string
+    		json = mapper.writeValueAsString(map);
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
+    	return json;
+    }
+    
     @RequestMapping("/coAuthor")
     public String getcoAuthor(@RequestParam(value = "name", required = false) String name) {
     	System.out.println("paper sevice name : " + name);

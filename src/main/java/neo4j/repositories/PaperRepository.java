@@ -50,7 +50,8 @@ public interface PaperRepository extends GraphRepository<Paper> {
     		" WITH a, p,COUNT(p) AS Related with p.title AS Paper, a.name AS Author ORDER BY Related DESC LIMIT {k} return Paper, collect(Author) as cast")
     List<Map<String, Object>> topKRelated(@Param("words") String[] words, @Param("k") int k);
     
-  
+    @Query("MATCH (a:Author)-[:PUBLISH]->(p:Paper) where p.year > {from} and p.year < {to} and a.name =~ ('(?i)^.*(' + {authors} + ').*$') return p.title as paper, p.year as year;")
+    List<Map<String, Object>> findPaperTA(@Param("from") int from, @Param("to") int to, @Param("authors") String authors);
 }
 
 

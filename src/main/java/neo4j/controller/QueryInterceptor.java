@@ -33,6 +33,7 @@ public class QueryInterceptor extends HandlerInterceptorAdapter   {
 		 map.put("topKrelated", "topKrelatedPapers.html");
 		 map.put("followedself", "followedself");
 		 map.put("followedother", "followedother");
+		 map.put("gettimeline", "timeline.html");
 	}
 	
 	@Override
