@@ -204,12 +204,6 @@ public class PaperService {
         int i = 0;
         int target = 0;
         while (result.hasNext()) {
-            // Map<String, String> row = result.next();
-            // nodes.add(map6("id", i, "title",row.get("input"),"label", "paper", "cluster", "1", "value", 2, "group", "paper"));
-            // if (i != 0) {
-            //     rels.add(map("source", i - 1,"target", i));
-            // }
-            // i++;
             Map<String, Object> row = result.next();
             nodes.add(map6("id", i, "title",row.get("input"),"label", "paper", "cluster", "1", "value", 2, "group", "paper"));
             target = i++;
@@ -356,6 +350,18 @@ public class PaperService {
         }
         return map("nodes", nodes, "links", rels);
     }
+
+	private Map<String, Object> toD3FormatGetExperts(Iterator<Map<String, String>> result) {
+		List<Map<String,Object>> nodes = new ArrayList<Map<String,Object>>();
+        List<Map<String,Object>> rels = new ArrayList<Map<String,Object>>();
+        int i = 0;
+        while (result.hasNext()) {
+            Map<String, String> row = result.next();
+            nodes.add(map6("id", i, "title",row.get("Author"),"label", "Author", "cluster", "1", "value", 1, "group", "Author"));
+            i++;
+        }
+        return map("nodes", nodes, "links", rels);
+	}
     
     @SuppressWarnings("rawtypes")
 	private Map<String, Object> toAlcFormat(Iterator<Map<String, Object>> result) {
@@ -535,6 +541,11 @@ public class PaperService {
     public Map<String, Object> getTopCitedPaper(int limit, String journal) {
         Iterator<Map<String, Object>> result = paperRepository.findTopCitedPaper(limit, journal).iterator();
         return toD3FormatTopCitedPaper(result);
+    }
+    
+    public Map<String, Object> getExperts(String[] words) {
+    	Iterator<Map<String, String>> result = paperRepository.findExperts(words).iterator();
+    	return toD3FormatGetExperts(result);
     }
 }
 

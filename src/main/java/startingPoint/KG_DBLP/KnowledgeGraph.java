@@ -3,29 +3,17 @@ package startingPoint.KG_DBLP;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
-
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
-import java.util.Optional;
-
-import javax.servlet.http.HttpServletRequest;
-
 import neo4j.domain.*;
 import neo4j.repositories.*;
 import neo4j.services.DatasetService;
@@ -367,4 +355,30 @@ public class KnowledgeGraph extends WebMvcConfigurerAdapter {
         System.out.println(json);
         return json;
     }
+    
+    @RequestMapping("/getAreaExperts")
+    public String getAreaExperts(@RequestParam(value = "keywords",required = false) String keywords) {
+    	System.out.println(keywords);
+    	keywords = keywords.replace("%2C", " ");
+    	keywords = keywords.replace('+', ' ');
+    	System.out.println("after replace : " + keywords);
+    	String[] words = keywords.split("  ");
+    	for (int i = 0; i < words.length; i++) {
+    		words[i] = words[i].trim();
+    		System.out.println(words[i]);
+    	}
+    	
+
+    	String json = "";
+    	Map<String, Object> map = paperService.getExperts(words);
+    	ObjectMapper mapper = new ObjectMapper();
+    	try {
+    		//convert map to JSON string
+    		json = mapper.writeValueAsString(map);
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
+    	return json;
+    }
+    
 }

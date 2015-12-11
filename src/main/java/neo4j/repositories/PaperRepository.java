@@ -43,12 +43,20 @@ public interface PaperRepository extends GraphRepository<Paper> {
     @Query("match (pa:Paper)-[:CITE]->(pb:Paper) return pa.title as input, collect(pb.title) as cast LIMIT {limit}")
     List<Map<String, Object>> findPaperCitation(@Param("limit") int limit);
 
-    @Query("match (pa:Paper)-[:CITE]->(pb:Paper) WHERE pb.journal = {journal} return pb.title as input, collect(pa.title) as cast, COUNT(pa) as connections ORDER BY connections DESC LIMIT {limit}")
-    List<Map<String, Object>> findTopCitedPaper(@Param("limit") int limit, @Param("journal") String journal);
     
     @Query("UNWIND {words} AS key MATCH (p:Paper)<-[:PUBLISH]-(a:Author) WHERE p.title =~ ('(?i).*'+key+'.*')" +
     		" WITH a, p,COUNT(p) AS Related with p.title AS Paper, a.name AS Author ORDER BY Related DESC LIMIT {k} return Paper, collect(Author) as cast")
     List<Map<String, Object>> topKRelated(@Param("words") String[] words, @Param("k") int k);
+
+    // @Query("match (pa:Paper)-[:CITE]->(pb:Paper) WHERE pb.journal = {journal} return pb.title as input, collect(pa.title) as cast LIMIT {limit}")
+    // List<Map<String, Object>> findTopCitedPaper(@Param("limit") int limit, @Param("journal") String journal);
+    @Query("match (pa:Paper)-[:CITE]->(pb:Paper) WHERE pb.journal = {journal} return pb.title, collect(pa.title) as cast, COUNT(pa) as connections ORDER BY COUNT(pa) DESC LIMIT {limit}")
+    List<Map<String, Object>> findTopCitedPaper(@Param("limit") int limit, @Param("journal") String journal);
+    
+    @Query("UNWIND {words} AS key MATCH (p:Paper)<-[:PUBLISH]-(a:Author) " +
+    		"WHERE p.title =~ ('(?i).*'+key+'.*') with a.name AS Author, COUNT(p) as Papers where Papers > 3 " + 
+    		"return Author order by Papers DESC Limit 10")
+    List<Map<String, String>> findExperts(@Param("words") String[] words);
     
     @Query("MATCH (a:Author)-[:PUBLISH]->(p:Paper) where p.year > {from} and p.year < {to} and a.name =~ ('(?i)^.*(' + {authors} + ').*$') return p.title as paper, p.year as year;")
     List<Map<String, Object>> findPaperTA(@Param("from") int from, @Param("to") int to, @Param("authors") String authors);
