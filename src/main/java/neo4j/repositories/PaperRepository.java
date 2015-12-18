@@ -50,7 +50,7 @@ public interface PaperRepository extends GraphRepository<Paper> {
 
     // @Query("match (pa:Paper)-[:CITE]->(pb:Paper) WHERE pb.journal = {journal} return pb.title as input, collect(pa.title) as cast LIMIT {limit}")
     // List<Map<String, Object>> findTopCitedPaper(@Param("limit") int limit, @Param("journal") String journal);
-    @Query("match (pa:Paper)-[:CITE]->(pb:Paper) WHERE pb.journal = {journal} return pb.title, collect(pa.title) as cast, COUNT(pa) as connections ORDER BY COUNT(pa) DESC LIMIT {limit}")
+    @Query("match (pa:Paper)-[:CITE]->(pb:Paper) WHERE pb.journal = {journal} return pb.title as input, collect(pa.title) as cast, COUNT(pa) as connections ORDER BY COUNT(pa) DESC LIMIT {limit}")
     List<Map<String, Object>> findTopCitedPaper(@Param("limit") int limit, @Param("journal") String journal);
     
     @Query("UNWIND {words} AS key MATCH (p:Paper)<-[:PUBLISH]-(a:Author) " +
